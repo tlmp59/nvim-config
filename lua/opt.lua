@@ -1,10 +1,6 @@
 --> [vim.g] :help vim.g for more information
 local g = vim.g
---  set <space> as mapleader
-g.mapleader = " "
-g.maplocalleader = " "
-
---  set to true if have nerdfont installed
+--  set to true if have nerdfont installedsplit
 g.have_nerd_font = true
 
 --  disable netrw
@@ -40,7 +36,7 @@ opt.signcolumn = "yes" --> a vertical area on the left side of the editor window
 
 --  configure on Vim wait time for certain sequences
 opt.updatetime = 250 --> how long Vim waits after stop typing before trigger certain events
-opt.timeoutlen = 300 -- other options: "no", "auto", "number"
+opt.timeoutlen = 1000 -- other options: "no", "auto", "number"
 --> how long Vim waits for a mapped sequence to complete if not completed within time Vim will execute the partial mapping or key code
 
 --  configure how new splits should be opened
@@ -81,7 +77,7 @@ opt.scrolloff = 10
 --  sets how neovim will display certain whitespace characters in the editor.
 --   see `:help 'list'`and `:help 'listchars'`
 opt.list = true
-opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+opt.listchars = { tab = "| ", trail = "·", nbsp = "␣" }
 
 --  disable show the mode, since it's already in the status line
 opt.showmode = false
