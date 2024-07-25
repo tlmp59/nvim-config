@@ -1,3 +1,6 @@
+-- [[ Description ]]
+
+-- [[ Config ]]
 return {
 	"stevearc/oil.nvim",
 	opts = {

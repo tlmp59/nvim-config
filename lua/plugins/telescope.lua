@@ -1,3 +1,6 @@
+-- [[ Description ]]
+
+-- [[ Config ]]
 return {
 	{
 		"nvim-telescope/telescope.nvim",

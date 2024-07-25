@@ -1,3 +1,6 @@
+-- [[ Description ]]
+
+-- [[ Config ]]
 return {
 	"nvim-lualine/lualine.nvim",
 	dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -20,9 +23,9 @@ return {
 					end,
 				},
 				lualine_b = { "branch", "diff" },
-				lualine_c = { "buffers" },
+				lualine_c = { "filename" },
 				lualine_x = { "diagnostics" },
-				lualine_y = { "encoding", "filetype", "progress" },
+				lualine_y = { "encoding", function() return vim.bo.filetype end, "progress" },
 				lualine_z = { "location" },
 			},
 			extensions = {"fzf", "lazy", "mason", "oil"},

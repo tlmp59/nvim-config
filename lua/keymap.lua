@@ -1,6 +1,15 @@
 local M = vim.keymap.set
-local function unM(mode, lhs)
-	vim.keymap.set(mode, lhs, "<Nop>", { noremap = true, silent = true })
+
+-- function to safely delete default keymaps
+local function unM(modes, lhs)
+  for _, mode in ipairs(modes) do
+    local mappings = vim.api.nvim_get_keymap(mode)
+    for _, map in ipairs(mappings) do
+      if map.lhs == lhs then
+        vim.keymap.del(mode, lhs)
+      end
+    end
+  end
 end
 
 --------------------------------------------------------
@@ -86,7 +95,8 @@ M("n", "<C-w>mw", ":vertical resize<CR>", { desc = "Max out [w]idth", silent = t
 unM({ "n", "i", "v" }, "<C-w>o")
 M("n", "<C-w>x", ":only<CR>", { desc = "Close all other windows", silent = true })
 
---  disable some unused keymaps
+--------------------------------------------------------
+--> [[ Disable unused keymaps ]]
 unM({ "n", "i", "v" }, "<C-w>s")
 unM({ "n", "i", "v" }, "<C-w>v")
 unM({ "n", "i", "v" }, "<C-w>T")

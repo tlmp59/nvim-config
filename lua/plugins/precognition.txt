@@ -2,7 +2,7 @@
 
 -- [[ Config ]]
 return {
-    'lukas-reineke/indent-blankline.nvim',
-    main = 'ibl',
+    "tris203/precognition.nvim",
+    event = "VeryLazy",
     opts = {},
 }

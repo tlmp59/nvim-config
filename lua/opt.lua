@@ -36,7 +36,7 @@ opt.signcolumn = "yes" --> a vertical area on the left side of the editor window
 
 --  configure on Vim wait time for certain sequences
 opt.updatetime = 250 --> how long Vim waits after stop typing before trigger certain events
-opt.timeoutlen = 1000 -- other options: "no", "auto", "number"
+opt.timeoutlen = 500 -- other options: "no", "auto", "number"
 --> how long Vim waits for a mapped sequence to complete if not completed within time Vim will execute the partial mapping or key code
 
 --  configure how new splits should be opened
