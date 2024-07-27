@@ -47,7 +47,7 @@ opt.splitbelow = true
 opt.inccommand = "split" -- other opts: 'split', ''
 
 --  show which line the cursor is on
-opt.cursorline = false
+opt.cursorline = true
 
 --  configure backup option
 -- opt.swapfile = false
@@ -66,13 +66,14 @@ opt.termguicolors = true
 opt.conceallevel = 2 --> "conceal" is a way to simplify the visual presentation of text while preserving the full content in the file
 
 -- optiont tab indent
-opt.tabstop = 2
-opt.softtabstop = 2
-opt.shiftwidth = 2
+opt.tabstop = 4
+opt.softtabstop = 4
+opt.shiftwidth = 4
 opt.expandtab = true --> instead of inserting a single tab character set this to true will instead insert an equivalent number of space characters
 
 --  minimal number fo screen lines to keep above and below cursor
 opt.scrolloff = 10
+opt.sidescrolloff = 8
 
 --  sets how neovim will display certain whitespace characters in the editor.
 --   see `:help 'list'`and `:help 'listchars'`

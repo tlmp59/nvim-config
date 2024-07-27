@@ -1,22 +1,15 @@
 local M = vim.keymap.set
 
 -- function to safely delete default keymaps
-local function unM(modes, lhs)
-  for _, mode in ipairs(modes) do
-    local mappings = vim.api.nvim_get_keymap(mode)
-    for _, map in ipairs(mappings) do
-      if map.lhs == lhs then
-        vim.keymap.del(mode, lhs)
-      end
-    end
-  end
+local function unM(mode, lhs, options)
+  return pcall(vim.keymap.del, mode, lhs, options or {})
 end
 
 --------------------------------------------------------
 --> [[ Nice to have ]]
 -- disable <space> for leader key
 unM({'n', 'v'}, '<Space>')
-
+unM({'n', 'v', 'x'}, '-')
 --  set highlight on search, remove on pressing <Esc> in normal mode
 M("n", "<Esc>", "<cmd>nohlsearch<CR>")
 

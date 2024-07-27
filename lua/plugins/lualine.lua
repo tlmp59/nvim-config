@@ -25,10 +25,16 @@ return {
 				lualine_b = { "branch", "diff" },
 				lualine_c = { "filename" },
 				lualine_x = { "diagnostics" },
-				lualine_y = { "encoding", function() return vim.bo.filetype end, "progress" },
+				lualine_y = {
+					"encoding",
+					function()
+						return vim.bo.filetype
+					end,
+					"progress",
+				},
 				lualine_z = { "location" },
 			},
-			extensions = {"fzf", "lazy", "mason", "oil"},
+			extensions = { "fzf", "lazy", "mason" },
 		})
 	end,
 }

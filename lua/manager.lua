@@ -21,6 +21,11 @@ require("lazy").setup({
 	"tpop/vim-sleuth",
 	spec = {
 		{ import = "plugins" },
+		{ import = "plugins.lsp" },
 	},
-	checker = { enabled = true, notify = false }, --> automatically check for plugin updates
+	checker = { enabled = true, notify = false}, --> automatically check for plugin updates
+    change_detection = {
+        enable = true,
+        notify = false,
+    }
 })
