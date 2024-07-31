@@ -10,11 +10,18 @@ return {
 		harpoon:setup()
 
 		local M = vim.keymap.set
+		-- compare with a list of unwanted filetype to be loaded in harpoon?
 		M("n", "<leader>ha", function()
-			if vim.o.fileformat ~= "oil" then
+			if vim.o.filetype == "oil" then
+				vim.notify("Unable to add in harpoon", vim.log.levels.WARN)
+			else
 				harpoon:list():add()
 			end
 		end, { desc = "[H]arpoon [A]dd" })
+
+		M("n", "<leader>hr", function()
+			harpoon:list():remove()
+		end, { desc = "[H]arpoon [R]emove" })
 
 		M("n", "<Space>hp", function()
 			harpoon:list():prev()

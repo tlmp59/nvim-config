@@ -2,14 +2,14 @@ local M = vim.keymap.set
 
 -- function to safely delete default keymaps
 local function unM(mode, lhs, options)
-  return pcall(vim.keymap.del, mode, lhs, options or {})
+	return pcall(vim.keymap.del, mode, lhs, options or {})
 end
 
 --------------------------------------------------------
 --> [[ Nice to have ]]
 -- disable <space> for leader key
-unM({'n', 'v'}, '<Space>')
-unM({'n', 'v', 'x'}, '-')
+unM({ "n", "v" }, "<Space>")
+unM({ "n", "v", "x" }, "-")
 --  set highlight on search, remove on pressing <Esc> in normal mode
 M("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
@@ -45,11 +45,12 @@ M("n", "<leader>fc", ":Telescope colorscheme", { desc = "[F]ind [C]olorscheme" }
 --------------------------------------------------------
 --> [[ Buffers/Tabs ]]
 -- seemlessly navigate between buffers/tabs
-M("n", "tk", ":bl<cr>", { noremap = false, silent = true })
-M("n", "tj", ":bf<cr>", { noremap = false, silent = true })
-M("n", "th", ":bp<cr>", { noremap = false, silent = true })
-M("n", "tl", ":bn<cr>", { noremap = false, silent = true })
-M("n", "td", ":bd<cr>", { noremap = false, silent = true })
+M("n", "tk", ":bl<cr>", { desc = "Last tab/buffer", noremap = false, silent = true })
+M("n", "tj", ":bf<cr>", { desc = "First tab/buffer", noremap = false, silent = true })
+M("n", "th", ":bp<cr>", { desc = "Left tab/buffer", noremap = false, silent = true })
+M("n", "tl", ":bn<cr>", { desc = "Right tab/buffer", noremap = false, silent = true })
+M("n", "tq", ":bd<cr>", { desc = "Quit tab/buffer", noremap = false, silent = true })
+M("n", "tn", ":bn<cr>", { desc = "New tab/buffer", noremap = false, silent = true })
 
 --------------------------------------------------------
 --> [[ Windows ]]
@@ -60,10 +61,10 @@ M("n", "<C-j>", ":wincmd j<CR>", { desc = "Move focus to the lower window" })
 M("n", "<C-k>", ":wincmd k<CR>", { desc = "Move focus to the upper window" })
 
 --  change window postision
-M("n", "<C-w>h", ":wincmd H<CR>", { desc = "Change window position to far left"})
-M("n", "<C-w>l", ":wincmd L<CR>", { desc = "Change window position to far right"})
-M("n", "<C-w>j", ":wincmd J<CR>", { desc = "Change window position to far bottom"})
-M("n", "<C-w>k", ":wincmd K<CR>", { desc = "Change window position to far top"})
+M("n", "<C-w>h", ":wincmd H<CR>", { desc = "Change window position to far left" })
+M("n", "<C-w>l", ":wincmd L<CR>", { desc = "Change window position to far right" })
+M("n", "<C-w>j", ":wincmd J<CR>", { desc = "Change window position to far bottom" })
+M("n", "<C-w>k", ":wincmd K<CR>", { desc = "Change window position to far top" })
 
 --  windows size adjustment
 M("n", "<C-Left>", ":vertical resize +10<CR>", { silent = true })
