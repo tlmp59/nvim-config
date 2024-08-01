@@ -31,11 +31,11 @@ My config was made possible thank to ['kickstart.nvim'](https://github.com/nvim-
   - etc.
 
 ### Neovim
-<detail><summary> Linux/WSL </summary>
+<details><summary> Linux/WSL </summary>
 ```sh
 git clone https://github.com/ov3ipo/neovim "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
 ```
-</detail>
+</details>
 
 
 
