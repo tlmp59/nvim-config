@@ -18,7 +18,10 @@ opt.relativenumber = true
 opt.mouse = "" -- other option: "a" all, "n" normal, "i" insert, "v" visual
 
 --  enable yank in system clipboard
-opt.clipboard = "unnamedplus"
+--   sync clipboard between OS and Neovim, schedule the setting after 'UiEnter' because it can increase startup time
+vim.schedule(function()
+	opt.clipboard = "unnamedplus"
+end)
 
 --  toggle word wrap
 opt.wrap = false

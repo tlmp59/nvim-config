@@ -58,7 +58,7 @@ return {
 				config = {},
 				window = {
 					config = {
-						relative = "win",
+						-- relative = "win",
 						border = "rounded",
 					},
 					max_width_share = 1,
@@ -84,12 +84,12 @@ return {
 		opts = {
 			format = function(buf_id, label)
 				local suffix = vim.bo[buf_id].modified and "[+]" or ""
-				return string.format("| %s%s |", label, suffix)
+				return string.format(" %s%s ", label, suffix)
 			end,
 			show_icons = false,
 			set_vim_settings = true,
 			-- One of 'left', 'right', 'none'.
-			tabpage_section = "right",
+			tabpage_section = "none",
 		},
 	},
 }

@@ -91,12 +91,17 @@ return {
 					grep_open_files = true,
 					prompt_title = "Live Grep in Open Files",
 				})
-			end, { desc = "[S]earch [/] in Open Files" })
+			end, { desc = "[F]ind [/] in Open Files" })
 
 			-- Shortcut for searching your Neovim configuration files
-			vim.keymap.set("n", "<leader>fn", function()
+			vim.keymap.set("n", "<leader>fp", function()
 				builtin.find_files({ cwd = vim.fn.stdpath("config") })
-			end, { desc = "[S]earch [N]eovim files" })
+			end, { desc = "[F]ind neovim [Plugins]" })
+
+			-- Shortcut for searching for Obsidian notes
+			vim.keymap.set("n", "<leader>fn", function()
+				builtin.find_files({ cwd = vim.fn.stdpath("obsidian") })
+			end, { desc = "[F]ind obsidian [N]otes" })
 		end,
 	},
 }

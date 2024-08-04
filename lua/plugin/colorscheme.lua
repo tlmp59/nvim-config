@@ -13,11 +13,4 @@ return {
 			})
 		end,
 	},
-	-- open {} to add other colorschemes
-	-- {
-	-- 	"colorscheme_input",
-	-- 	init = function()
-	-- 		-- opt
-	-- 	end
-	-- },
 }
