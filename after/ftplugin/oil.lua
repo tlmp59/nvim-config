@@ -1,3 +1,3 @@
 local M = vim.keymap.set
-vim.opt.number = false
-vim.opt.relativenumber = false
+vim.opt_local.number = false
+vim.opt_local.relativenumber = false

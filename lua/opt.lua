@@ -95,3 +95,7 @@ o.cmdheight = 0
 
 --  configure how completion menus behave
 o.completeopt = "menuone,noselect" --> show popup menu even there is only one match and do not select anything from there
+
+--------------------------------------------------------
+--> [vim.ui] :help vim.ui for more information
+local ui = vim.ui

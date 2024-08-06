@@ -33,7 +33,8 @@ return {
 		event = "VimEnter",
 		opts = {
 			triggers = {
-				{ mode = "n", keys = "<Leader>" },
+				{ mode = "n", keys = "<leader>" },
+				{ mode = "v", keys = "<leader>" },
 				{ mode = "n", keys = "s" },
 				{ mode = "n", keys = "t" },
 
@@ -58,8 +59,8 @@ return {
 				config = {},
 				window = {
 					config = {
-						-- relative = "win",
-						border = "rounded",
+						relative = "editor",
+						border = "single",
 					},
 					max_width_share = 1,
 					windblend = 0,
@@ -75,21 +76,5 @@ return {
 				},
 			})
 		end,
-	},
-
-	--> tabline
-	{
-		"echasnovski/mini.tabline",
-		version = "*",
-		opts = {
-			format = function(buf_id, label)
-				local suffix = vim.bo[buf_id].modified and "[+]" or ""
-				return string.format(" %s%s ", label, suffix)
-			end,
-			show_icons = false,
-			set_vim_settings = true,
-			-- One of 'left', 'right', 'none'.
-			tabpage_section = "none",
-		},
 	},
 }

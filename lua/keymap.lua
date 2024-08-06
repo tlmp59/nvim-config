@@ -39,26 +39,28 @@ M("v", ">", ">gv")
 M("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
 M("v", "K", ":m '<-2<CR>gv=gv", { silent = true })
 
---  quickly change colorscheme
-M("n", "<leader>fc", ":Telescope colorscheme", { desc = "[F]ind [C]olorscheme" })
+--------------------------------------------------------
+--> [[ Buffers, Tabs, Windows ]]
+M("n", "<Tab>", ":bn<cr>", { desc = "Last tab/buffer", noremap = true, silent = true })
+M("n", "<C-Tab>", ":bp<cr>", { desc = "First tab/buffer", noremap = true, silent = true })
 
 --------------------------------------------------------
---> [[ Buffers/Tabs ]]
--- seemlessly navigate between buffers/tabs
-M("n", "tk", ":bl<cr>", { desc = "Last tab/buffer", noremap = false, silent = true })
-M("n", "tj", ":bf<cr>", { desc = "First tab/buffer", noremap = false, silent = true })
-M("n", "th", ":bp<cr>", { desc = "Left tab/buffer", noremap = false, silent = true })
-M("n", "tl", ":bn<cr>", { desc = "Right tab/buffer", noremap = false, silent = true })
-M("n", "tq", ":bd<cr>", { desc = "Quit tab/buffer", noremap = false, silent = true })
-M("n", "tn", ":bn<cr>", { desc = "New tab/buffer", noremap = false, silent = true })
+--> [[ Tabs ]]
+M("n", "<leader>tl", ":tabnext<cr>", { desc = "[T]ab next", noremap = true, silent = true })
+M("n", "<leader>th", ":tabprevious<cr>", { desc = "[T]ab previous", noremap = true, silent = true })
+M("n", "<leader>tj", ":tablast<cr>", { desc = "[T]ab last", noremap = true, silent = true })
+M("n", "<leader>tk", ":tabfirst<cr>", { desc = "[T]ab first", noremap = true, silent = true })
+M("n", "<leader>tn", ":tabnew<cr>", { desc = "[T]ab [N]ew", noremap = true, silent = true })
+M("n", "<leader>tc", ":tabclose<cr>", { desc = "[T]ab [C]lose", noremap = true, silent = true })
+M("n", "<leader>to", ":tabonly<cr>", { desc = "[T]ab [O]nly", noremap = true, silent = true })
 
 --------------------------------------------------------
 --> [[ Windows ]]
 --  seemlessly navigate between split windows
-M("n", "<C-h>", ":wincmd h<CR>", { desc = "Move focus to the left window" })
-M("n", "<C-l>", ":wincmd l<CR>", { desc = "Move focus to the right window" })
-M("n", "<C-j>", ":wincmd j<CR>", { desc = "Move focus to the lower window" })
-M("n", "<C-k>", ":wincmd k<CR>", { desc = "Move focus to the upper window" })
+M("n", "<C-h>", ":wincmd h<cr>", { desc = "Move focus to the left window" })
+M("n", "<C-l>", ":wincmd l<cr>", { desc = "Move focus to the right window" })
+M("n", "<C-j>", ":wincmd j<cr>", { desc = "Move focus to the lower window" })
+M("n", "<C-k>", ":wincmd k<cr>", { desc = "Move focus to the upper window" })
 
 --  change window postision
 M("n", "<C-w>h", ":wincmd H<CR>", { desc = "Change window position to far left" })
@@ -87,7 +89,7 @@ M("n", "<C-w>mw", ":vertical resize<CR>", { desc = "Max out [w]idth", silent = t
 
 --  replace <C-w>o with <C-w>x to match with tmux
 unM({ "n", "i", "v" }, "<C-w>o")
-M("n", "<C-w>x", ":only<CR>", { desc = "Close all other windows", silent = true })
+M("n", "<C-w>x", "<CMD>only<CR>", { desc = "Close all other windows", silent = true })
 
 --------------------------------------------------------
 --> [[ Disable unused keymaps ]]
@@ -101,20 +103,7 @@ unM({ "n", "i", "v" }, "<C-w>+")
 unM({ "n", "i", "v" }, "<C-w>-")
 
 --------------------------------------------------------
---> [[ Telescope ]]
-
---------------------------------------------------------
---> [[ LSP ]]
-
---------------------------------------------------------
---> [[ Trouble ]]
-
---------------------------------------------------------
---> [[ Surround ]]
-
---------------------------------------------------------
 --> [[ Oil ]]
--- global keymap
-M("n", "-", ":Oil<CR>", { desc = "Open parent dir" })
+M("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 --------------------------------------------------------
