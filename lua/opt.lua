@@ -3,14 +3,41 @@ local g = vim.g
 --  set to true if have nerdfont installedsplit
 g.have_nerd_font = true
 
---  disable netrw
-g.load_netrw = 1
-g.load_netrwPlugin = 1
+--  disable unused default plugin
+local disabled_built_ins = {
+	"netrw",
+	"netrwPlugin",
+	"netrwSettings",
+	"netrwFileHandlers",
+	"gzip",
+	"zip",
+	"zipPlugin",
+	"tar",
+	"tarPlugin",
+	"getscript",
+	"getscriptPlugin",
+	"vimball",
+	"vimballPlugin",
+	"2html_plugin",
+	"logipat",
+	"rrhelper",
+	"spellfile_plugin",
+	"matchit",
+	"python3_provider",
+}
+
+for _, plugin in pairs(disabled_built_ins) do
+	vim.g["loaded_" .. plugin] = 1
+end
 
 --------------------------------------------------------
 --> [vim.opt] :help vim.opt for more information
 local opt = vim.opt
 
+-- testing
+opt.fillchars:append({ eob = " " })
+
+--  number col
 opt.number = true
 opt.relativenumber = true
 
@@ -26,6 +53,9 @@ end)
 --  toggle word wrap
 opt.wrap = false
 opt.breakindent = true -- require wrap = true for this to take effect, this allow to preserve the indentaion of a line when it wraps to the next line
+-- opt.breakindent = "list:-1"
+-- opt.breakindentopt = "shift:2"
+-- opt.linebreak = true
 
 --  autoindent
 opt.autoindent = true --> copy indent from current line when starting new one
@@ -84,7 +114,7 @@ opt.list = true
 opt.listchars = { tab = "| ", trail = "·", nbsp = "␣" }
 
 --  disable show the mode, since it's already in the status line
-opt.showmode = false
+opt.showmode = true
 
 --------------------------------------------------------
 --> [vim.o] :help vim.o for more information
@@ -96,6 +126,5 @@ o.cmdheight = 0
 --  configure how completion menus behave
 o.completeopt = "menuone,noselect" --> show popup menu even there is only one match and do not select anything from there
 
---------------------------------------------------------
---> [vim.ui] :help vim.ui for more information
-local ui = vim.ui
+--  hide statusline
+o.laststatus = 0

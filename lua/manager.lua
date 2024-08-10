@@ -20,8 +20,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 	"tpop/vim-sleuth",
 	spec = {
-		{ import = "features"},
-        {import = "utils"},
+		{ import = "plugin" },
 	},
 	checker = { enabled = true, notify = false }, --> automatically check for plugin updates
 	change_detection = {

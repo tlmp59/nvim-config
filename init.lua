@@ -6,4 +6,3 @@ vim.g.maplocalleader = " "
 require("opt")
 require("keymap")
 require("manager")
-require("autocmd")

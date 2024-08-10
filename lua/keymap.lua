@@ -41,8 +41,16 @@ M("v", "K", ":m '<-2<CR>gv=gv", { silent = true })
 
 --------------------------------------------------------
 --> [[ Buffers, Tabs, Windows ]]
+-- TODO: make keymap for buffes management
 M("n", "<Tab>", ":bn<cr>", { desc = "Last tab/buffer", noremap = true, silent = true })
 M("n", "<C-Tab>", ":bp<cr>", { desc = "First tab/buffer", noremap = true, silent = true })
+-- M("n", "<leader>tl", ":tabnext<cr>", { desc = "[T]ab next", noremap = true, silent = true })
+-- M("n", "<leader>th", ":tabprevious<cr>", { desc = "[T]ab previous", noremap = true, silent = true })
+-- M("n", "<leader>tj", ":tablast<cr>", { desc = "[T]ab last", noremap = true, silent = true })
+-- M("n", "<leader>tk", ":tabfirst<cr>", { desc = "[T]ab first", noremap = true, silent = true })
+-- M("n", "<leader>tn", ":tabnew<cr>", { desc = "[T]ab [N]ew", noremap = true, silent = true })
+-- M("n", "<leader>tc", ":tabclose<cr>", { desc = "[T]ab [C]lose", noremap = true, silent = true })
+-- M("n", "<leader>to", ":tabonly<cr>", { desc = "[T]ab [O]nly", noremap = true, silent = true })
 
 --------------------------------------------------------
 --> [[ Tabs ]]
@@ -104,6 +112,47 @@ unM({ "n", "i", "v" }, "<C-w>-")
 
 --------------------------------------------------------
 --> [[ Oil ]]
-M("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+-- M("n", "-", "<cmd>lua MiniFiles.open()<cr>", { desc = "Open parent directory" })
+-- M("n", "-", "<cmd>Oil --float<cr>", { desc = "Open parent directory" })
 
 --------------------------------------------------------
+--> [[ Testing ]]
+vim.keymap.set("n", "ba", function()
+	vim.ui.input({ prompt = "New Buffer: " }, function(input)
+		vim.cmd({ cmd = "badd", args = { input } })
+	end)
+end)
+
+-- vim.keymap.set("n", "<Leader>p", function()
+-- 	vim.ui.select({
+-- 		"buf_lines",
+-- 		"buffers",
+-- 		"cli",
+-- 		"commands",
+-- 		"diagnostic",
+-- 		"explorer",
+-- 		"files",
+-- 		"git_branches",
+-- 		"git_commits",
+-- 		"git_files",
+-- 		"hit_hunks",
+-- 		"grep",
+-- 		"grep_live",
+-- 		"help",
+-- 		"hipatterns",
+-- 		"history",
+-- 		"hl_groups",
+-- 		"keymaps",
+-- 		"list",
+-- 		"lsp",
+-- 		"makrs",
+-- 		"oldfiles",
+-- 		"options",
+-- 		"registers",
+-- 		"resume",
+-- 		"spellsuggest",
+-- 		"treesitter",
+-- 	}, { prompt = "Pick " }, function(choice)
+-- 		return vim.cmd({ cmd = "Pick", args = { choice } })
+-- 	end)
+-- end, { desc = "[Mini.pick] Pick ..." })

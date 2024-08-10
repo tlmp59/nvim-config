@@ -16,6 +16,7 @@ return {
 
 			local fzf = require("fzf-lua")
 			local M = vim.keymap.set
+
 			M("n", "<leader>fh", fzf.helptags, { desc = "[F]ind [H]elp" })
 			M("n", "<leader>fk", fzf.keymaps, { desc = "[F]ind [K]eymaps" })
 			M("n", "<leader>ff", fzf.files, { desc = "[F]ind [F]iles" })
@@ -41,7 +42,7 @@ return {
 
 			M("n", "<leader>/", function()
 				fzf.grep_curbuf({
-					prompt = "Fuzzy Search in Current Buffer > ",
+					prompt = "Fuzzy Search in Current Buffer",
 					winopts = {
 						preview = {
 							hidden = "hidden", -- Disable the preview window
@@ -57,6 +58,10 @@ return {
 					},
 				})
 			end, { desc = "[/] Fuzzily search in current buffer" })
+
+			M("n", "<leader>fp", function()
+				fzf.files({ cwd = vim.fn.stdpath("config") })
+			end, { desc = "[F]ind neovim [Plugins]" })
 		end,
 	},
 }
