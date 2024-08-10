@@ -127,4 +127,4 @@ o.cmdheight = 0
 o.completeopt = "menuone,noselect" --> show popup menu even there is only one match and do not select anything from there
 
 --  hide statusline
-o.laststatus = 0
+-- o.laststatus = 0

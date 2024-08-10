@@ -46,9 +46,23 @@ autocmd("BufLeave", {
 		if no_buffers_open() then
 			vim.schedule(function()
 				require("mini.starter").open()
-				-- require("alpha").start()
-				-- vim.cmd("Dashboard")
 			end)
 		end
+	end,
+})
+
+--> disable mini statusline for certain file
+-- autocmd({ "BufEnter", "User" }, {
+-- 	pattern = { "oil://*", "MiniStarterOpened" },
+-- 	desc = "Disable MiniStatusline for certain filetypes",
+-- 	callback = function()
+-- 		vim.o.laststatus = 0
+-- 	end,
+-- })
+autocmd({ "VimEnter" }, {
+	pattern = { "oil://*", "MiniStarterOpened" },
+	desc = "Disable MiniStatusline for certain filetypes",
+	callback = function()
+		vim.o.laststatus = 0
 	end,
 })

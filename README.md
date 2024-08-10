@@ -41,6 +41,7 @@ git clone https://github.com/ov3ipo/neovim "${XDG_CONFIG_HOME:-$HOME/.config}"/n
 
 ## Todolist
 [ ] Configure custom statusline
+- [ ] Learn how config it can be daunting
 [ ] Make open experience better with oil and starter
 
 
