@@ -1,11 +1,15 @@
 return {
 	"stevearc/oil.nvim",
-	event = "VimEnter",
 	dependencies = { "nvim-tree/nvim-web-devicons" },
+	init = function()
+		local oil_open_folder = function(path)
+			require("oil").open(path)
+		end
+		require("config.autocmd").attach_file_browser("oil", oil_open_folder)
+	end,
 	config = function()
 		require("oil").setup({
-			--[[Options]]
-			default_file_explorer = true,
+			default_file_explorer = false,
 			delete_to_trash = true,
 			skip_confirm_for_simple_edits = true,
 			prompt_save_on_select_new_entry = true,
@@ -13,11 +17,14 @@ return {
 				show_hidden = true,
 			},
 
+			buf_options = {
+				buflisted = false,
+			},
+
 			columns = {
 				{ "icon", add_padding = false },
 			},
 
-			--[[Keymaps]]
 			use_default_keymaps = false,
 			keymaps = {
 				["<esc>"] = "actions.close",
@@ -31,20 +38,22 @@ return {
 				["g."] = "actions.toggle_hidden",
 				["g\\"] = "actions.toggle_trash",
 			},
+
 			float = {
 				padding = 2,
-				max_width = 0,
-				max_height = 0,
+				max_width = 50,
+				max_height = 50,
 				border = "single",
 				win_options = {
 					winblend = 0,
 				},
+				override = function(conf)
+					conf.row = 0
+					conf.col = 0
+					return conf
+				end,
 			},
 		})
-
-		vim.keymap.set("n", "-", "<cmd>Oil<cr>", { noremap = true, silent = true, desc = "Open oil in parent dir" })
-		vim.keymap.set("n", "<leader>e", function()
-			require("oil").open(vim.fn.getcwd())
-		end, { desc = "Open oil in current working dir", noremap = true, silent = true })
+		require("config.keymap").M_oil()
 	end,
 }

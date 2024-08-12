@@ -1,6 +1,3 @@
--- [[ Description ]]
-
--- [[ Config ]]
 return {
 	{
 		"lukas-reineke/indent-blankline.nvim",
