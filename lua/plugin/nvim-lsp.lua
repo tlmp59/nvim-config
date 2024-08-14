@@ -21,7 +21,6 @@ return {
 		"neovim/nvim-lspconfig",
 		event = "BufReadPre",
 		dependencies = {
-			----------------------------------------
 			--- language servers installer using mason
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
@@ -29,27 +28,22 @@ return {
 		},
 
 		config = function()
-			----------------------------------------
 			--- basic setup
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
 				callback = function(event)
-					----------------------------------------
 					--- keymaps
 					require("config.keymap").M_lsp(event)
 
-					----------------------------------------
 					--- autocommand for underline word under cursor
 					require("config.autocmd").underline_word_under_cursor(event)
 				end,
 			})
 
-			----------------------------------------
 			--- incorporating cmp_nvim_lsp capabilities into LSP configuration
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
-			----------------------------------------
 			--- language servers & tools management
 			require("mason").setup()
 
@@ -64,7 +58,6 @@ return {
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
-			----------------------------------------
 			--- language servers setup tool
 			require("mason-lspconfig").setup({
 				handlers = {

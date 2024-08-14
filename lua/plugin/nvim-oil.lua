@@ -19,10 +19,12 @@ return {
 
 			buf_options = {
 				buflisted = false,
+				bufhidden = "hide",
 			},
 
 			columns = {
-				{ "icon", add_padding = false },
+				"size",
+				{ "icon", add_padding = true },
 			},
 
 			use_default_keymaps = false,
@@ -37,21 +39,6 @@ return {
 				["gs"] = "actions.change_sort",
 				["g."] = "actions.toggle_hidden",
 				["g\\"] = "actions.toggle_trash",
-			},
-
-			float = {
-				padding = 2,
-				max_width = 50,
-				max_height = 50,
-				border = "single",
-				win_options = {
-					winblend = 0,
-				},
-				override = function(conf)
-					conf.row = 0
-					conf.col = 0
-					return conf
-				end,
 			},
 		})
 		require("config.keymap").M_oil()

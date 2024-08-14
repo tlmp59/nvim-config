@@ -94,7 +94,6 @@ function autocmds.hl_yanked_text()
 end
 
 ------------------------------------------------------------------------------
---> unlisted all unnamed buffers
 function autocmds.hide_unnamed_buf_on_startup()
 	local unlist_unnamed = function(data)
 		local buf = data.buf
@@ -155,6 +154,28 @@ function autocmds.underline_word_under_cursor(event)
 		})
 	end
 end
+
+------------------------------------------------------------------------------
+---@param opts string
+function autocmds.local_winbar(opts)
+	api.nvim_create_autocmd("BufWinEnter", {
+		pattern = "*",
+		group = autocmds.group_id,
+		desc = "Enable winbar on buffers enter",
+		callback = function()
+			vim.schedule(function()
+				if vim.bo.buflisted then
+					vim.opt_local.winbar = opts
+				else
+					vim.opt_local.winbar = nil
+				end
+			end)
+		end,
+	})
+end
+
+------------------------------------------------------------------------------
+function autocmds.testing() end
 
 ------------------------------------------------------------------------------
 return autocmds

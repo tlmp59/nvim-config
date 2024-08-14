@@ -22,6 +22,7 @@ function keymaps.M_unused()
 	unM({ "n", "i", "v" }, "<C-w>>")
 	unM({ "n", "i", "v" }, "<C-w>+")
 	unM({ "n", "i", "v" }, "<C-w>-")
+	unM({ "n" }, "Q")
 end
 
 ------------------------------------------------------------------------------
@@ -54,6 +55,12 @@ function keymaps.M_utils()
 	--  move selected up and down
 	M("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
 	M("v", "K", ":m '<-2<CR>gv=gv", { silent = true })
+
+	-- primeagen cool keymaps
+	M("x", "<leader>p", [["_dP]])
+	M({ "n", "v" }, "<leader>y", [["+y]])
+	M("n", "<leader>Y", [["+Y]])
+	M({ "n", "v" }, "<leader>dd", [["_d]])
 end
 
 ------------------------------------------------------------------------------
@@ -102,8 +109,13 @@ function keymaps.M_buftabwin()
 end
 
 ------------------------------------------------------------------------------
+function keymaps.M_info()
+	M("n", "<C-g>i", "", { silent = true, noremap = true, desc = "Get [I]nfomation" })
+	M("n", "<C-g>g", "", { silent = true, noremap = true, desc = "Get [G]its" })
+end
+------------------------------------------------------------------------------
 function keymaps.M_oil()
-	M("n", "-", "<cmd>Oil <cr>", { noremap = true, silent = true, desc = "Open oil in parent dir" })
+	M("n", "-", "<cmd>Oil<cr>", { silent = true, desc = "Open oil in parent dir" })
 	M("n", "<leader>e", "<cmd>Oil .<cr>", { noremap = true, silent = true, desc = "Open oil in current working dir" })
 end
 
@@ -116,6 +128,7 @@ function keymaps.M_picker()
 	M("n", "<leader><leader>", "<cmd>Pick buffers<cr>", { desc = "[F]ind existing [B]uffers" })
 	M("n", "<leader>fk", "<cmd>Pick keymaps<cr>", { desc = "[F]ind [K]eymaps" })
 	M("n", "<leader>fo", "<cmd>Pick oldfiles<cr>", { desc = '[F]ind [O]ld Recent Files ("." for repeat)' })
+	M("n", "<leader>fe", "<cmd>Pick explorer<cr>", { desc = "[F]ind [E]xplorer" })
 
 	local picker = require("mini.pick")
 	vim.ui.select = picker.ui_select
@@ -296,15 +309,19 @@ function keymaps.M_lsp(event)
 	local M_local = function(keys, func, desc)
 		vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 	end
-	-- M_local("gd", require("fzf-lua").lsp_definitions, "[G]oto [D]efinition")
-	-- M_local("gr", require("fzf-lua").lsp_references, "[G]oto [R]eferences")
-	-- M_local("gI", require("fzf-lua").lsp_implementations, "[G]oto [I]mplementation")
-	-- M_local("<leader>D", require("fzf-lua").lsp_typedefs, "Type [D]efinition")
-	-- M_local("<leader>ds", require("fzf-lua").lsp_document_symbols, "[D]ocument [S]ymbols")
-	-- M_local("<leader>ws", require("fzf-lua").lsp_live_workspace_symbols, "[W]orkspace [S]ymbols")
+
+	M_local("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
 	M_local("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+	M_local("gr", vim.lsp.buf.references, "[G]oto [R]eferences")
 	M_local("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 	M_local("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+	M_local("<leader>ws", vim.lsp.buf.workspace_symbol, "[W]orkspace [S]ymbols")
+	M_local("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
+	M_local("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
+	M_local("<leader>ds", function()
+		MiniExtra.pickers.lsp({ scope = "document_symbol" })
+	end, "[D]ocument [S]ymbols")
+	M_local("K", vim.lsp.buf.hover, "Code hover")
 end
 
 ------------------------------------------------------------------------------
@@ -330,4 +347,21 @@ function keymaps.M_bufmanage()
 end
 
 ------------------------------------------------------------------------------
+function keymaps.M_cmdline()
+	M({ "n", "v", "c", "x" }, ":", function()
+		require("fine-cmdline").open({ default_value = "" })
+	end, { desc = "Open cmdline", noremap = true })
+end
+
+------------------------------------------------------------------------------
+function keymaps.M_undotree()
+	M("n", "<leader>u", vim.cmd.UndotreeToggle, { desc = "Toggle Undotree" })
+end
+
+------------------------------------------------------------------------------
+function keymaps.M_tscontext()
+	M("n", "[c", function()
+		require("treesitter-context").go_to_context(vim.v.count1)
+	end, { silent = true })
+end
 return keymaps

@@ -40,8 +40,23 @@ git clone https://github.com/ov3ipo/neovim "${XDG_CONFIG_HOME:-$HOME/.config}"/n
 </details>
 
 ## Todolist
-[ ] Configure custom statusline
-- [ ] Learn how config it can be daunting
-[ ] Make open experience better with oil and starter
+~other
+- [ ] continue on configure for obsidian nvim
+- [ ] enable syncthing for syncing between devices for obsidian
 
+~neovim
+- [ ] learn how to manage nvim-ui
+- [ ] integrated quarto with jupytertext for notebook edit
+- [ ] fix error with markdown file linting
+- [ ] instead of using statusline maybe we can try to not using it by create cmd that echo information related to buffers (keeping winbar)
+- [ ] problem with neovim diagnostic, it keep poping up update when typing
 
+~tmux
+- [x] ricing tmux --> got the first step this can took longer than i thougth
+
+~done
+- [x] Make open experience better with oil and starter
+- [x] configure custom statusline using opt local --> end up not using it replace with keymap to echo buffers information
+- [x] setup undotree
+- [x] nvim navic --> repace with nvim-treesitter-context
+- [x] hide cmdline when open mini.pick --> plugin issue wait for solution

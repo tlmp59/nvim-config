@@ -9,7 +9,7 @@ local o = vim.o
 local setting = {}
 
 ------------------------------------------------------------------------------
-function setting.global()
+function setting.opt_global()
 	-- leader must be set before loading any plugins
 	g.mapleader = " "
 	g.maplocalleader = " "
@@ -88,13 +88,13 @@ function setting.global()
 	opt.inccommand = "split" -- other opts: 'split', ''
 
 	--  show which line the cursor is on
-	opt.cursorline = true
+	opt.cursorline = false
 
 	--  configure backup option
-	-- opt.swapfile = false
-	-- opt.backup = false
-	-- opt.undodir = -- set this later
-	-- opt.undofile = true
+	opt.swapfile = false
+	opt.backup = false
+	opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+	opt.undofile = true
 
 	--  searching options
 	opt.hlsearch = true --> highlight search set to false won't keep all matches highlighted after a search
@@ -124,17 +124,31 @@ function setting.global()
 	--  disable show the mode, since it's already in the status line
 	opt.showmode = false
 
-	--  hide command line
-	o.cmdheight = 0
+	--  make sure that statusline is comletely disable
+	opt.statusline = "%#Normal#"
+
+	--  dsiable statusline on startup
+	o.laststatus = 0
 
 	--  configure how completion menus behave
 	o.completeopt = "menuone,noselect" --> show popup menu even there is only one match and do not select anything from there
 
-	--  hide statusline
-	-- o.statusline = "%#Normal#"
-
-	-- hide tabline
+	--  hide tabline
 	o.showtabline = 0
+
+	--  hide statusline
+	o.laststatus = 0
+
+	--  hide command line
+	o.cmdheight = 1
 end
 
+------------------------------------------------------------------------------
+function setting.opt_local()
+	--  tweaking winbar
+	local opts = "%f"
+	require("config.autocmd").local_winbar(opts)
+end
+
+------------------------------------------------------------------------------
 return setting

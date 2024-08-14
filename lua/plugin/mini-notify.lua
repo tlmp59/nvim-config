@@ -9,18 +9,17 @@ return {
 			window = {
 				config = {
 					relative = "editor",
-					border = "single",
+					border = "",
 				},
 				max_width_share = 1,
-				windblend = 0,
+				windblend = 10,
 			},
 			lsp_progress = {
 				duration_last = 1500,
 			},
 			content = {
 				format = function(notif)
-					-- is there a way to combine repeated message?
-					return string.format(" %s | %s ", notif.level, notif.msg)
+					return string.format("%s %s ", notif.level, notif.msg)
 				end,
 			},
 		})
