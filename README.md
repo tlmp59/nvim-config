@@ -49,10 +49,16 @@ git clone https://github.com/ov3ipo/neovim "${XDG_CONFIG_HOME:-$HOME/.config}"/n
 - [ ] integrated quarto with jupytertext for notebook edit
 - [ ] fix error with markdown file linting
 - [ ] instead of using statusline maybe we can try to not using it by create cmd that echo information related to buffers (keeping winbar)
-- [ ] problem with neovim diagnostic, it keep poping up update when typing
+- - [ ] filename
+- - [ ] filetype
+- - [ ] fileencoding
+- - [ ] git branch --> maybe let this show on tmux statusline
+
+- [ ] PROBLEM with neovim diagnostic, it keep poping up update when typing --> perhaps can be due to lsp event enter, recheck with kickstart module
+- [ ] PROBLEM with finds colorscheme, seem like some how is doesnt work
 
 ~tmux
-- [x] ricing tmux --> got the first step this can took longer than i thougth
+- [x] ricing tmux --> got the first step this can took longer than i thought
 
 ~done
 - [x] Make open experience better with oil and starter

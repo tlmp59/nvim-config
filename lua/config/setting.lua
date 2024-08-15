@@ -146,7 +146,7 @@ end
 ------------------------------------------------------------------------------
 function setting.opt_local()
 	--  tweaking winbar
-	local opts = "%f"
+	local opts = nil
 	require("config.autocmd").local_winbar(opts)
 end
 

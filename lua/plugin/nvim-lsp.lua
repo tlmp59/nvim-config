@@ -45,7 +45,11 @@ return {
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
 			--- language servers & tools management
-			require("mason").setup()
+			require("mason").setup({
+				ui = {
+					border = "single",
+				},
+			})
 
 			local servers = {
 				-- add other servers here

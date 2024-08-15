@@ -109,10 +109,29 @@ function keymaps.M_buftabwin()
 end
 
 ------------------------------------------------------------------------------
+--- WARN: another rabbit hole
+--- TODO: press <c-g> to print out information related to current buffer
 function keymaps.M_info()
-	M("n", "<C-g>i", "", { silent = true, noremap = true, desc = "Get [I]nfomation" })
-	M("n", "<C-g>g", "", { silent = true, noremap = true, desc = "Get [G]its" })
+	local function filename()
+		return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":t")
+	end
+
+	local function filetype()
+		return vim.bo.filetype
+	end
+
+	-- PROBLEM: print out too much messages that can be annoying when you want to see other messages
+	local function info()
+		return string.format("[%s] %s | %s ", filetype(), filename(), "testing")
+	end
+
+	M("n", "<C-g>i", function()
+		vim.notify(info())
+	end, { silent = true, noremap = true, desc = "Get [I]nfomation" })
+
+	-- M("n", "<C-g>g", function() end, { silent = true, noremap = true, desc = "Get [G]its" })
 end
+
 ------------------------------------------------------------------------------
 function keymaps.M_oil()
 	M("n", "-", "<cmd>Oil<cr>", { silent = true, desc = "Open oil in parent dir" })
@@ -197,7 +216,8 @@ function keymaps.M_picker()
 		})
 	end
 
-	M("n", "<leader>fc", "<cmd>Pick colorschemes<cr>", { desc = "[F]ind [C]olorschemes" })
+	-- M("n", "<leader>fc", "<cmd>Pick colorschemes<cr>", { desc = "[F]ind [C]olorschemes" })
+	M("n", "<leader>fc", ":colorscheme ", { desc = "[F]ind [C]olorschemes" })
 
 	-- M("n", "<leader>fw", pick.grep_cword, { desc = "[F]ind current [W]ord" })
 	-- M("n", "<leader>fd", pick.diagnostics_workspace, { desc = "[F]ind workspace [D]iagnostics" })
@@ -319,7 +339,7 @@ function keymaps.M_lsp(event)
 	M_local("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
 	M_local("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
 	M_local("<leader>ds", function()
-		MiniExtra.pickers.lsp({ scope = "document_symbol" })
+		require("mini.extra").pickers.lsp({ scope = "document_symbol" })
 	end, "[D]ocument [S]ymbols")
 	M_local("K", vim.lsp.buf.hover, "Code hover")
 end
@@ -363,5 +383,22 @@ function keymaps.M_tscontext()
 	M("n", "[c", function()
 		require("treesitter-context").go_to_context(vim.v.count1)
 	end, { silent = true })
+end
+------------------------------------------------------------------------------
+function keymaps.M_fidget()
+	M("n", "<C-g>a", "<cmd>Fidget history<cr>", { noremap = true, silent = true, desc = "[G]et [A]ll history" })
+	M(
+		"n",
+		"<C-g>n",
+		"<cmd>Fidget history --group_key Notification<cr>",
+		{ noremap = true, silent = true, desc = "[G]et [N]otifications history" }
+	)
+	M(
+		"n",
+		"<C-g>w",
+		"<cmd>Fidget history --group_key WARN<cr>",
+		{ noremap = true, silent = true, desc = "[G]et [W]arning history" }
+	)
+	M("n", "<C-g>c", "<cmd>Fidget clear_history<cr>", { noremap = true, silent = true, desc = "[C]lear history" })
 end
 return keymaps

@@ -9,10 +9,10 @@ return {
 			window = {
 				config = {
 					relative = "editor",
-					border = "",
+					border = "single",
 				},
 				max_width_share = 1,
-				windblend = 10,
+				windblend = 0,
 			},
 			lsp_progress = {
 				duration_last = 1500,
