@@ -1,6 +1,7 @@
 return {
 	--> clue
 	"echasnovski/mini.clue",
+	event = "VimEnter",
 	version = "*",
 	config = function()
 		require("mini.clue").setup({
@@ -19,7 +20,7 @@ return {
 			},
 			window = {
 				config = { anchor = "SW", row = "auto", col = "auto", width = "auto", border = "single" },
-				delay = 0,
+				delay = 500,
 			},
 			clues = {
 				-- Enhance this by adding descriptions for <Leader> mapping groups

@@ -1,6 +1,7 @@
 return {
 	"stevearc/oil.nvim",
 	dependencies = { "nvim-tree/nvim-web-devicons" },
+	event = { "BufReadPre", "BufNewFile" },
 	init = function()
 		local oil_open_folder = function(path)
 			require("oil").open(path)

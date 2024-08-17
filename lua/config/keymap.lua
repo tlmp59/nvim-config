@@ -120,9 +120,17 @@ function keymaps.M_info()
 		return vim.bo.filetype
 	end
 
+	local function fileencoding()
+		return vim.bo.fileencoding
+	end
+
+	local function fileformat()
+		return vim.bo.fileformat
+	end
+
 	-- PROBLEM: print out too much messages that can be annoying when you want to see other messages
 	local function info()
-		return string.format("[%s] %s | %s ", filetype(), filename(), "testing")
+		return string.format("%s | %s | %s | %s ", filetype(), filename(), fileencoding(), fileformat())
 	end
 
 	M("n", "<C-g>i", function()
@@ -134,8 +142,8 @@ end
 
 ------------------------------------------------------------------------------
 function keymaps.M_oil()
-	M("n", "-", "<cmd>Oil<cr>", { silent = true, desc = "Open oil in parent dir" })
-	M("n", "<leader>e", "<cmd>Oil .<cr>", { noremap = true, silent = true, desc = "Open oil in current working dir" })
+	M("n", "-", "<cmd>Oil .<cr>", { silent = true, desc = "Open oil in parent dir" })
+	M("n", "<leader>ed", "<cmd>Oil<cr>", { noremap = true, silent = true, desc = "[ED]it explorer" })
 end
 
 ------------------------------------------------------------------------------
@@ -157,7 +165,7 @@ function keymaps.M_picker()
 		post_hooks = {},
 	}
 
-	vim.api.nvim_create_autocmd({ "User" }, {
+	vim.api.nvim_create_autocmd("User", {
 		pattern = "pickerStart",
 		group = vim.api.nvim_create_augroup("minipick-pre-hooks", { clear = true }),
 		desc = "Invoke pre_hook for specific picker based on source.name.",
@@ -168,7 +176,7 @@ function keymaps.M_picker()
 		end,
 	})
 
-	vim.api.nvim_create_autocmd({ "User" }, {
+	vim.api.nvim_create_autocmd("User", {
 		pattern = "pickerStop",
 		group = vim.api.nvim_create_augroup("minipick-post-hooks", { clear = true }),
 		desc = "Invoke post_hook for specific picker based on source.name.",
@@ -338,9 +346,9 @@ function keymaps.M_lsp(event)
 	M_local("<leader>ws", vim.lsp.buf.workspace_symbol, "[W]orkspace [S]ymbols")
 	M_local("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
 	M_local("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
-	M_local("<leader>ds", function()
-		require("mini.extra").pickers.lsp({ scope = "document_symbol" })
-	end, "[D]ocument [S]ymbols")
+	-- M_local("<leader>ds", function()
+	-- 	require("mini.extra").pickers.lsp({ scope = "document_symbol" })
+	-- end, "[D]ocument [S]ymbols")
 	M_local("K", vim.lsp.buf.hover, "Code hover")
 end
 
@@ -384,6 +392,7 @@ function keymaps.M_tscontext()
 		require("treesitter-context").go_to_context(vim.v.count1)
 	end, { silent = true })
 end
+
 ------------------------------------------------------------------------------
 function keymaps.M_fidget()
 	M("n", "<C-g>a", "<cmd>Fidget history<cr>", { noremap = true, silent = true, desc = "[G]et [A]ll history" })
@@ -401,4 +410,47 @@ function keymaps.M_fidget()
 	)
 	M("n", "<C-g>c", "<cmd>Fidget clear_history<cr>", { noremap = true, silent = true, desc = "[C]lear history" })
 end
+
+------------------------------------------------------------------------------
+function keymaps.M_telescope()
+	local builtin = require("telescope.builtin")
+	M("n", "<leader>fh", builtin.help_tags, { desc = "[F]ind [H]elp" })
+	M("n", "<leader>fk", builtin.keymaps, { desc = "[F]ind [K]eymaps" })
+	M("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
+	M("n", "<leader>fs", builtin.builtin, { desc = "[F]ind [F]elect Telescope" })
+	M("n", "<leader>fw", builtin.grep_string, { desc = "[F]ind current [W]ord" })
+	M("n", "<leader>fg", builtin.live_grep, { desc = "[F]ind by [G]rep" })
+	M("n", "<leader>fd", builtin.diagnostics, { desc = "[F]ind [D]iagnostics" })
+	M("n", "<leader>fr", builtin.resume, { desc = "[F]ind [R]esume" })
+	M("n", "<leader>fo", builtin.oldfiles, { desc = '[F]ind [O]ld Recent Files ("." for repeat)' })
+	M("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+	M("n", "<leader>/", function()
+		builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
+			winblend = 10,
+			previewer = false,
+		}))
+	end, { desc = "[/] Fuzzily search in current buffer" })
+	M("n", "<leader>f/", function()
+		builtin.live_grep({
+			grep_open_files = true,
+			prompt_title = "Live Grep in Open Files",
+		})
+	end, { desc = "[F]ind [/] in Open Files" })
+	M("n", "<leader>fp", function()
+		builtin.find_files({ cwd = vim.fn.stdpath("config") })
+	end, { desc = "[F]ind neovim [Plugins]" })
+	M(
+		"n",
+		"<space>ee",
+		":Telescope file_browser path=%:p:h select_buffer=true<CR>",
+		{ noremap = true, silent = true, desc = "Open explorer in current dir" }
+	)
+	M(
+		"n",
+		"<space>fc",
+		"<cmd>Telescope colorscheme<cr>",
+		{ noremap = true, silent = true, desc = "Open explorer in current dir" }
+	)
+end
+
 return keymaps

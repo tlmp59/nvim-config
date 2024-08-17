@@ -15,17 +15,16 @@ end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
 -- Setup lazy.nvim
-require("lazy").setup({
+require("lazy").setup("plugin", {
 	"tpop/vim-sleuth",
-	spec = {
-		{ import = "plugin" },
+	performance = {
+		cache = { enabled = true },
+		reset_packpath = true,
 	},
+	defaults = { lazy = true },
 	checker = { enabled = true, notify = false }, --> automatically check for plugin updates
 	change_detection = {
 		enable = true,
-		notify = true,
-	},
-	ui = {
-		border = "single",
+		notify = false,
 	},
 })

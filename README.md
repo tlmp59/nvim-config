@@ -40,25 +40,23 @@ git clone https://github.com/ov3ipo/neovim "${XDG_CONFIG_HOME:-$HOME/.config}"/n
 </details>
 
 ## Todolist
-~other
+~progess
 - [ ] continue on configure for obsidian nvim
+- [ ] setup to show git branch on winbar
+
+~other
 - [ ] enable syncthing for syncing between devices for obsidian
 
 ~neovim
-- [ ] learn how to manage nvim-ui
 - [ ] integrated quarto with jupytertext for notebook edit
 - [ ] fix error with markdown file linting
-- [ ] instead of using statusline maybe we can try to not using it by create cmd that echo information related to buffers (keeping winbar)
-- - [ ] filename
-- - [ ] filetype
-- - [ ] fileencoding
-- - [ ] git branch --> maybe let this show on tmux statusline
 
 - [ ] PROBLEM with neovim diagnostic, it keep poping up update when typing --> perhaps can be due to lsp event enter, recheck with kickstart module
-- [ ] PROBLEM with finds colorscheme, seem like some how is doesnt work
+
+- [ ] setup with gx command "chrishrb/gx.nvim",
+- [ ] a way to replace bufmanager? [Telescope close buffers under cursor](https://github.com/nvim-telescope/telescope.nvim/issues/621)
 
 ~tmux
-- [x] ricing tmux --> got the first step this can took longer than i thought
 
 ~done
 - [x] Make open experience better with oil and starter
@@ -66,3 +64,11 @@ git clone https://github.com/ov3ipo/neovim "${XDG_CONFIG_HOME:-$HOME/.config}"/n
 - [x] setup undotree
 - [x] nvim navic --> repace with nvim-treesitter-context
 - [x] hide cmdline when open mini.pick --> plugin issue wait for solution
+- [x] create a winbar to separate buffers, since it kinda hard to see file under, winbar should include
+- - [x] filename
+- - [x] filetype
+- - [x] fileencoding
+- [x] ricing tmux --> got the first step this can took longer than i thought
+- [x] let oil lazy load and use telescope file brownser instead --> telescope-file-browser is a bit slow on large file (solve -> just disable git_status opt)
+- [x] PROBLEM with finds colorscheme, seem like some how is doesnt work --> use telescope
+- [x] increase startup time [Neovim & Lazy - Blazingly Fast Startup](https://www.youtube.com/watch?v=7vPwPx9u5cc)

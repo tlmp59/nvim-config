@@ -1,5 +1,6 @@
 return {
 	"echasnovski/mini.ai",
+	event = "BufReadPre",
 	version = "*",
 	opts = {
 		n_lines = 500,

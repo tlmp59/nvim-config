@@ -3,6 +3,10 @@ return {
 	{
 		"folke/lazydev.nvim",
 		ft = "lua",
+		dependencies = {
+			--  set this to lazy load (this has already been set by default)
+			"Bilal2453/luvit-meta",
+		},
 		opts = {
 			library = {
 				{ path = "luvit-meta/library", words = { "vim%.uv" } },
@@ -10,16 +14,11 @@ return {
 		},
 	},
 
-	{
-		"Bilal2453/luvit-meta",
-		lazy = true,
-	},
-
 	------------------------------------------------------------------------------
-	--> [[ Lsp: nvim-lspconfig ]]
+	--- never lazy load nvim-lsp
 	{
 		"neovim/nvim-lspconfig",
-		event = "BufReadPre",
+		event = "VimEnter",
 		dependencies = {
 			--- language servers installer using mason
 			"williamboman/mason.nvim",
@@ -45,11 +44,7 @@ return {
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
 			--- language servers & tools management
-			require("mason").setup({
-				ui = {
-					border = "single",
-				},
-			})
+			require("mason").setup()
 
 			local servers = {
 				-- add other servers here

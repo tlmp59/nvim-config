@@ -12,7 +12,6 @@ local autocmds = {
 }
 
 ------------------------------------------------------------------------------
---> autocmd to properly launch a file browser plugin when opening dirs
 ---@param plugin_name string
 ---@param plugin_open fun(path: string) function to open file browser
 function autocmds.attach_file_browser(plugin_name, plugin_open)
@@ -39,44 +38,6 @@ function autocmds.attach_file_browser(plugin_name, plugin_open)
 				api.nvim_set_option_value("bufhidden", "wipe", { buf = 0 })
 				plugin_open(vim.fn.expand("%:p:h"))
 			end)
-		end,
-	})
-end
-
-------------------------------------------------------------------------------
---> exit oil when have no buffers will call starter
-function autocmds.call_starter_when_no_buf()
-	local function no_buffers_worth_saving()
-		for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-			if vim.bo[bufnr].buflisted and not vim.bo[bufnr].readonly then -- disregard unlisted buffers
-				if vim.api.nvim_buf_get_name(bufnr) ~= "" then
-					return false -- there is a buffer with a name
-				end
-				local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-				if #lines > 1 or (#lines == 1 and #lines[1] > 0) then
-					return false -- there is a buffer with content
-				end
-			end
-		end
-		return true -- there are no listed, writable, named, nonempty buffers
-	end
-
-	vim.api.nvim_create_autocmd("BufLeave", {
-		group = autocmds.group_id,
-		pattern = "*",
-		callback = function()
-			local buf_name = vim.api.nvim_buf_get_name(0)
-			if buf_name:match("oil://") then -- Check if the buffer is an Oil buffer
-				vim.schedule(function()
-					local new_buf_name = vim.api.nvim_buf_get_name(0)
-					if new_buf_name:match("oil://") or new_buf_name:match("startuptime") then
-						return -- Do nothing if the new buffer is also an Oil buffer
-					end
-					if no_buffers_worth_saving() then
-						require("mini.starter").open()
-					end
-				end)
-			end
 		end,
 	})
 end
@@ -175,7 +136,25 @@ function autocmds.local_winbar(opts)
 end
 
 ------------------------------------------------------------------------------
-function autocmds.testing() end
+function autocmds.disable_autoformat()
+	api.nvim_create_autocmd("FileType", {
+		pattern = "*",
+		desc = "Disable autoformat for all filetype",
+		callback = function()
+			vim.b.autoformat = false
+		end,
+	})
+end
 
 ------------------------------------------------------------------------------
+function autocmds.resize_splits_after_win_resize()
+	api.nvim_create_autocmd("FileType", {
+		pattern = "*",
+		desc = "Auto resize splits after window resize",
+		command = "wincmd =",
+	})
+end
+
+------------------------------------------------------------------------------
+function autocmds.testing() end
 return autocmds

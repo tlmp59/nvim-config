@@ -1,6 +1,7 @@
 return {
 	-->  surroudings
 	"echasnovski/mini.surround",
+	event = { "BufReadPre", "BufNewFile" },
 	version = "*",
 	opts = {},
 	-- Example:

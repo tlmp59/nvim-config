@@ -16,6 +16,7 @@ function setting.opt_global()
 
 	--  set to true if have nerdfont installedsplit
 	g.have_nerd_font = true
+
 	--  disable unused default plugin
 	local disabled_built_ins = {
 		"netrw",
@@ -42,8 +43,17 @@ function setting.opt_global()
 		vim.g["loaded_" .. plugin] = 1
 	end
 
-	-- hide nonexist line indicator
+	--  hide nonexist line indicator
 	opt.fillchars:append({ eob = " " })
+
+	--  confirm for unsaved file
+	opt.confirm = true
+
+	--  make messages more visable
+	opt.shortmess = "aoOstTWAIcCFSqW"
+
+	--  control how the screen is adjusted when a new window (split) is opened
+	opt.splitkeep = "screen"
 
 	--  number col
 	opt.number = true
@@ -60,7 +70,7 @@ function setting.opt_global()
 
 	--  toggle word wrap
 	opt.wrap = false
-	opt.breakindent = true -- require wrap = true for this to take effect, this allow to preserve the indentaion of a line when it wraps to the next line
+	opt.breakindent = false -- require wrap = true for this to take effect, this allow to preserve the indentaion of a line when it wraps to the next line
 	-- opt.breakindent = "list:-1"
 	-- opt.breakindentopt = "shift:2"
 	-- opt.linebreak = true
@@ -88,7 +98,7 @@ function setting.opt_global()
 	opt.inccommand = "split" -- other opts: 'split', ''
 
 	--  show which line the cursor is on
-	opt.cursorline = false
+	opt.cursorline = true
 
 	--  configure backup option
 	opt.swapfile = false
@@ -126,6 +136,9 @@ function setting.opt_global()
 
 	--  make sure that statusline is comletely disable
 	opt.statusline = "%#Normal#"
+
+	--  make mouse movement smoother
+	opt.smoothscroll = true
 
 	--  dsiable statusline on startup
 	o.laststatus = 0
