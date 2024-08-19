@@ -1,7 +1,8 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-		event = { "BufReadPost", "BufNewFile" },
+		event = { "BufReadPost", "BufWritePost", "BufNewFile", "VeryLazy" }, --> "LazyFile" is the shortcut use within LazyNvim distro
+		lazy = vim.fn.argc(-1) == 0,
 		build = ":TSUpdate",
 		opts = {
 			ensure_installed = {

@@ -43,7 +43,6 @@ function autocmds.attach_file_browser(plugin_name, plugin_open)
 end
 
 ------------------------------------------------------------------------------
---> highlight when yanking (copying) text
 function autocmds.hl_yanked_text()
 	api.nvim_create_autocmd("TextYankPost", {
 		group = autocmds.group_id,

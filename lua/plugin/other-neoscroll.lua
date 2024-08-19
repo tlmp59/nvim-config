@@ -1,5 +1,5 @@
 return {
 	"karb94/neoscroll.nvim",
-	event = "BufEnter",
+	event = "BufReadPre",
 	opt = {},
 }

@@ -21,7 +21,7 @@ require("lazy").setup("plugin", {
 		cache = { enabled = true },
 		reset_packpath = true,
 	},
-	defaults = { lazy = true },
+	defaults = { lazy = false },
 	checker = { enabled = true, notify = false }, --> automatically check for plugin updates
 	change_detection = {
 		enable = true,

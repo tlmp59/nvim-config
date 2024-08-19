@@ -1,8 +1,7 @@
 return {
 	{
 		"nvim-telescope/telescope.nvim",
-		event = "VimEnter",
-		branch = "0.1.x",
+		version = false,
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{
@@ -16,6 +15,7 @@ return {
 			{ "nvim-telescope/telescope-file-browser.nvim" },
 			{ "nvim-tree/nvim-web-devicons" },
 		},
+		keys = require("config.keymap").M_telescope, --> use to trigger plugin when first press keybind
 		config = function()
 			local actions = require("telescope.actions")
 			require("telescope").setup({
@@ -58,8 +58,6 @@ return {
 			pcall(require("telescope").load_extension, "fzf")
 			pcall(require("telescope").load_extension, "ui-select")
 			pcall(require("telescope").load_extension, "file_browser")
-
-			require("config.keymap").M_telescope()
 		end,
 	},
 }

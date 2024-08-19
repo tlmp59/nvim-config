@@ -108,7 +108,7 @@ function keymaps.M_buftabwin()
 	M("n", "<C-w>x", "<CMD>only<CR>", { desc = "Close all other windows", silent = true })
 end
 
-------------------------------------------------------------------------------
+------------------------------------------------------------------------------key
 --- WARN: another rabbit hole
 --- TODO: press <c-g> to print out information related to current buffer
 function keymaps.M_info()
@@ -135,16 +135,14 @@ function keymaps.M_info()
 
 	M("n", "<C-g>i", function()
 		vim.notify(info())
-	end, { silent = true, noremap = true, desc = "Get [I]nfomation" })
-
-	-- M("n", "<C-g>g", function() end, { silent = true, noremap = true, desc = "Get [G]its" })
+	end, { silent = true, noremap = false, desc = "Get [I]nfomation" })
 end
 
 ------------------------------------------------------------------------------
-function keymaps.M_oil()
-	M("n", "-", "<cmd>Oil .<cr>", { silent = true, desc = "Open oil in parent dir" })
-	M("n", "<leader>ed", "<cmd>Oil<cr>", { noremap = true, silent = true, desc = "[ED]it explorer" })
-end
+keymaps.M_oil = {
+	{ "-", "<cmd>Oil .<cr>", "Open oil in parent dir" },
+	{ "<leader>ed", "<cmd>Oil<cr>", "[ED]it explorer" },
+}
 
 ------------------------------------------------------------------------------
 function keymaps.M_picker()
@@ -353,32 +351,24 @@ function keymaps.M_lsp(event)
 end
 
 ------------------------------------------------------------------------------
-function keymaps.M_trouble()
-	M("n", "<leader>qx", "<cmd>Trouble diagnostics toggle<cr>", { desc = "Diagnostics (Trouble)" })
-	M("n", "<leader>qb", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", { desc = "Buffer Diagnostics (Trouble)" })
-	M("n", "<leader>qs", "<cmd>Trouble symbols toggle focus=false<cr>", { desc = "Symbols (Trouble)" })
-	M(
-		"n",
+keymaps.M_trouble = {
+	{ "<leader>qx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics (Trouble)" },
+	{ "<leader>qb", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
+	{ "<leader>qs", "<cmd>Trouble symbols toggle focus=false<cr>", desc = "Symbols (Trouble)" },
+	{
 		"<leader>ql",
 		"<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-		{ desc = "LSP Definitions / references / ... (Trouble)" }
-	)
-	M("n", "<leader>qd", "<cmd>Trouble loclist toggle<cr>", { desc = "Destination List (Trouble)" })
-	M("n", "<leader>qf", "<cmd>Trouble qflist toggle<cr>", { desc = "Quickfix List (Trouble)" })
-end
+		desc = "LSP Definitions / references / ... (Trouble)",
+	},
+	{ "<leader>qd", "<cmd>Trouble loclist toggle<cr>", desc = "Destination List (Trouble)" },
+	{ "<leader>qf", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix List (Trouble)" },
+}
 
 ------------------------------------------------------------------------------
 function keymaps.M_bufmanage()
 	M("n", "<leader>bm", function()
 		require("buffer_manager.ui").toggle_quick_menu()
 	end, { desc = "Buffer menu", noremap = true })
-end
-
-------------------------------------------------------------------------------
-function keymaps.M_cmdline()
-	M({ "n", "v", "c", "x" }, ":", function()
-		require("fine-cmdline").open({ default_value = "" })
-	end, { desc = "Open cmdline", noremap = true })
 end
 
 ------------------------------------------------------------------------------
@@ -412,45 +402,81 @@ function keymaps.M_fidget()
 end
 
 ------------------------------------------------------------------------------
-function keymaps.M_telescope()
-	local builtin = require("telescope.builtin")
-	M("n", "<leader>fh", builtin.help_tags, { desc = "[F]ind [H]elp" })
-	M("n", "<leader>fk", builtin.keymaps, { desc = "[F]ind [K]eymaps" })
-	M("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
-	M("n", "<leader>fs", builtin.builtin, { desc = "[F]ind [F]elect Telescope" })
-	M("n", "<leader>fw", builtin.grep_string, { desc = "[F]ind current [W]ord" })
-	M("n", "<leader>fg", builtin.live_grep, { desc = "[F]ind by [G]rep" })
-	M("n", "<leader>fd", builtin.diagnostics, { desc = "[F]ind [D]iagnostics" })
-	M("n", "<leader>fr", builtin.resume, { desc = "[F]ind [R]esume" })
-	M("n", "<leader>fo", builtin.oldfiles, { desc = '[F]ind [O]ld Recent Files ("." for repeat)' })
-	M("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
-	M("n", "<leader>/", function()
-		builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
+--> TODO: change this to return table as telescope should be load when trigger certain keybind
+
+-- load plugin on key bind
+---@param key string
+---@param desc string
+---@param action_name any
+---@return table
+local function M_lazy_telescope(key, action_name, desc)
+	return {
+		key,
+		function()
+			if type(action_name) == "string" then
+				require("telescope.builtin")[action_name]()
+			elseif type(action_name) == "function" then
+				return action_name()
+			end
+		end,
+		desc = desc,
+	}
+end
+
+keymaps.M_telescope = {
+	M_lazy_telescope("<leader>ff", "find_files", "[F]ind [F]iles"),
+	M_lazy_telescope("<leader>fh", "help_tags", "[F]ind [H]elp"),
+	M_lazy_telescope("<leader>fk", "keymaps", "[F]ind [K]eymaps"),
+	M_lazy_telescope("<leader>fs", "builtin", "[F]ind [F]elect Telescope"),
+	M_lazy_telescope("<leader>fw", "grep_string", "[F]ind current [W]ord"),
+	M_lazy_telescope("<leader>fg", "live_grep", "[F]ind by [G]rep"),
+	M_lazy_telescope("<leader>fd", "diagnostics", "[F]ind [D]iagnostics"),
+	M_lazy_telescope("<leader>fr", "resume", "[F]ind [R]esume"),
+	M_lazy_telescope("<leader>fo", "oldfiles", '[F]ind [O]ld Recent Files ("." for repeat)'),
+	M_lazy_telescope("<leader>fc", "colorscheme", "[F]ind [C]olorschemes"),
+	M_lazy_telescope("<leader><leader>", "buffers", "[ ] Find existing buffers"),
+	M_lazy_telescope("<leader>/", function()
+		require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
 			winblend = 10,
 			previewer = false,
 		}))
-	end, { desc = "[/] Fuzzily search in current buffer" })
-	M("n", "<leader>f/", function()
-		builtin.live_grep({
+	end, "[/] Fuzzily search in current buffer"),
+	M_lazy_telescope("<leader>f/", function()
+		require("telescope.builtin").live_grep({
 			grep_open_files = true,
 			prompt_title = "Live Grep in Open Files",
 		})
-	end, { desc = "[F]ind [/] in Open Files" })
-	M("n", "<leader>fp", function()
-		builtin.find_files({ cwd = vim.fn.stdpath("config") })
-	end, { desc = "[F]ind neovim [Plugins]" })
+	end, "[F]ind [/] in Open Files"),
+	M_lazy_telescope("<leader>fp", function()
+		require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
+	end, "[F]ind neovim [Plugins]"),
+	M_lazy_telescope("<leader>ee", function()
+		require("telescope").extensions.file_browser.file_browser({
+			path = "%:p:h",
+			select_buffer = true,
+		})
+	end, "Open explorer in current dir"),
+}
+
+------------------------------------------------------------------------------
+function keymaps.M_obsidian()
+	local obsidian = require("obsidian")
+	M("n", "<leader>of", function()
+		if obsidian.util.cursor_on_markdown_link() then
+			return "<cmd>ObsidianFollowLink<cr>"
+		else
+			vim.notify("Not an obsidian link", vim.log.levels.WARN)
+		end
+	end, { noremap = true, silent = true, desc = "Obsidian follow link" })
 	M(
 		"n",
-		"<space>ee",
-		":Telescope file_browser path=%:p:h select_buffer=true<CR>",
-		{ noremap = true, silent = true, desc = "Open explorer in current dir" }
+		"<leader>on",
+		"<cmd>ObsidianNewFromTemplate<cr>",
+		{ noremap = true, silent = true, desc = "Obsidian create new note from templates" }
 	)
-	M(
-		"n",
-		"<space>fc",
-		"<cmd>Telescope colorscheme<cr>",
-		{ noremap = true, silent = true, desc = "Open explorer in current dir" }
-	)
+	M({ "n", "v" }, "<leader>oc", function()
+		return obsidian.util.toggle_checkbox()
+	end, { noremap = true, silent = true, desc = "Obsidian create new note from templates" })
 end
 
 return keymaps

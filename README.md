@@ -42,7 +42,6 @@ git clone https://github.com/ov3ipo/neovim "${XDG_CONFIG_HOME:-$HOME/.config}"/n
 ## Todolist
 ~progess
 - [ ] continue on configure for obsidian nvim
-- [ ] setup to show git branch on winbar
 
 ~other
 - [ ] enable syncthing for syncing between devices for obsidian
@@ -53,8 +52,22 @@ git clone https://github.com/ov3ipo/neovim "${XDG_CONFIG_HOME:-$HOME/.config}"/n
 
 - [ ] PROBLEM with neovim diagnostic, it keep poping up update when typing --> perhaps can be due to lsp event enter, recheck with kickstart module
 
+- [ ] setup to show git branch on winbar
 - [ ] setup with gx command "chrishrb/gx.nvim",
 - [ ] a way to replace bufmanager? [Telescope close buffers under cursor](https://github.com/nvim-telescope/telescope.nvim/issues/621)
+
+- [ ] setup <c-g> keybind to show gits related status
+
+
+- [ ] automatically create a new file when telescope does not found --> should ask for user input filetype
+
+- [x] reduce loading time by loading plugins for certain file type only
+   - [ ] trouble
+   - [x] telescope
+   - [x] oil 
+   - [ ] quarto
+
+- [ ] migrating to nord theme?
 
 ~tmux
 
@@ -72,3 +85,9 @@ git clone https://github.com/ov3ipo/neovim "${XDG_CONFIG_HOME:-$HOME/.config}"/n
 - [x] let oil lazy load and use telescope file brownser instead --> telescope-file-browser is a bit slow on large file (solve -> just disable git_status opt)
 - [x] PROBLEM with finds colorscheme, seem like some how is doesnt work --> use telescope
 - [x] increase startup time [Neovim & Lazy - Blazingly Fast Startup](https://www.youtube.com/watch?v=7vPwPx9u5cc)
+- [x] investigate on [LazyVim](https://github.com/LazyVim/LazyVim) for how they manage plugins for best performance --> currently serve bset at under 40ms
+
+# Note
+In lazy config
+- keymaps --> keybind will trigger the plugins when first press
+- cmd --> first call the cmd in cmdline will trigger the plugin

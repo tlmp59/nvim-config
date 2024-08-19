@@ -4,8 +4,8 @@ return {
 		"folke/lazydev.nvim",
 		ft = "lua",
 		dependencies = {
-			--  set this to lazy load (this has already been set by default)
 			"Bilal2453/luvit-meta",
+			lazy = true,
 		},
 		opts = {
 			library = {
@@ -18,7 +18,7 @@ return {
 	--- never lazy load nvim-lsp
 	{
 		"neovim/nvim-lspconfig",
-		event = "VimEnter",
+		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		dependencies = {
 			--- language servers installer using mason
 			"williamboman/mason.nvim",

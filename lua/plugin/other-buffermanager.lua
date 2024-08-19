@@ -1,6 +1,6 @@
 return {
 	"j-morano/buffer_manager.nvim",
-	event = "BufEnter",
+	event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 	dependencies = "nvim-lua/plenary.nvim",
 	config = function()
 		require("buffer_manager").setup()
