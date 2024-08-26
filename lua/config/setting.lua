@@ -60,7 +60,7 @@ function setting.opt_global()
 	opt.relativenumber = true
 
 	--  set mouse mode
-	opt.mouse = "" -- other option: "a" all, "n" normal, "i" insert, "v" visual
+	opt.mouse = "n" -- other option: "a" all, "n" normal, "i" insert, "v" visual
 
 	--  enable yank in system clipboard
 	--   sync clipboard between OS and Neovim, schedule the setting after 'UiEnter' because it can increase startup time
@@ -87,7 +87,7 @@ function setting.opt_global()
 
 	--  configure on Vim wait time for certain sequences
 	opt.updatetime = 250 --> how long Vim waits after stop typing before trigger certain events
-	opt.timeoutlen = 500 -- other options: "no", "auto", "number"
+	opt.timeoutlen = 1000 -- other options: "no", "auto", "number"
 	--> how long Vim waits for a mapped sequence to complete if not completed within time Vim will execute the partial mapping or key code
 
 	--  configure how new splits should be opened
@@ -159,7 +159,7 @@ end
 ------------------------------------------------------------------------------
 function setting.opt_local()
 	--  tweaking winbar
-	local opts = nil
+	local opts = "%f"
 	require("config.autocmd").local_winbar(opts)
 end
 

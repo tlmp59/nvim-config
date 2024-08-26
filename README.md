@@ -61,13 +61,15 @@ git clone https://github.com/ov3ipo/neovim "${XDG_CONFIG_HOME:-$HOME/.config}"/n
 
 - [ ] automatically create a new file when telescope does not found --> should ask for user input filetype
 
-- [x] reduce loading time by loading plugins for certain file type only
+- [ ] reduce loading time by loading plugins for certain file type only
    - [ ] trouble
    - [x] telescope
    - [x] oil 
    - [ ] quarto
 
-- [ ] migrating to nord theme?
+- [ ] create a script (user_cmd) to open current buffer file in corresponding defautl application
+    - [ ] search for how to change folder permission to read-only
+
 
 ~tmux
 
@@ -86,6 +88,8 @@ git clone https://github.com/ov3ipo/neovim "${XDG_CONFIG_HOME:-$HOME/.config}"/n
 - [x] PROBLEM with finds colorscheme, seem like some how is doesnt work --> use telescope
 - [x] increase startup time [Neovim & Lazy - Blazingly Fast Startup](https://www.youtube.com/watch?v=7vPwPx9u5cc)
 - [x] investigate on [LazyVim](https://github.com/LazyVim/LazyVim) for how they manage plugins for best performance --> currently serve bset at under 40ms
+- [x] migrating to nord theme?
+- [x] add sticky buf to prevent open file in unwanted spot
 
 # Note
 In lazy config

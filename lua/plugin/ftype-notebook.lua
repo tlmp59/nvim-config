@@ -1,5 +1,5 @@
 return {
-	--> quarto
+	-- TODO: setup quarto with jupytertext to edit notebookfile in text form
 	{
 		"quarto-dev/quarto-nvim",
 		ft = "quarto",
@@ -9,7 +9,4 @@ return {
 		},
 		opts = {},
 	},
-
-	--> jupytertext
-	-- require 'pip install jupytertext'
 }

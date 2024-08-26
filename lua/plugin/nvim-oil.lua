@@ -21,7 +21,7 @@ return {
 
 			buf_options = {
 				buflisted = false,
-				bufhidden = "wipe", -- hide
+				bufhidden = "hide", -- wipe
 			},
 
 			columns = {
@@ -48,7 +48,8 @@ return {
 					end
 
 					if no_buffers_worth_saving() then
-						vim.notify("Current no active buffers, choose a file to continue!", vim.log.levels.WARN)
+						-- vim.notify("Current no active buffers, choose a file to continue!", vim.log.levels.WARN)
+						require("mini.starter").open()
 						return
 					else
 						require("oil.actions").close.callback()
@@ -65,6 +66,5 @@ return {
 				["g\\"] = "actions.toggle_trash",
 			},
 		})
-		-- require("config.keymap").M_oil()
 	end,
 }

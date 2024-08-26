@@ -1,0 +1,21 @@
+-- Define custom highlight groups for each markdown heading level
+vim.api.nvim_set_hl(0, "@markdown.heading.1", { fg = "#bf616a", bold = true })
+vim.api.nvim_set_hl(0, "@markdown.heading.2", { fg = "#d08770", bold = true })
+vim.api.nvim_set_hl(0, "@markdown.heading.3", { fg = "#ebcb8b", bold = true })
+vim.api.nvim_set_hl(0, "@markdown.heading.4", { fg = "#a3be8c", bold = true })
+vim.api.nvim_set_hl(0, "@markdown.heading.5", { fg = "#8fbcbb", bold = true })
+vim.api.nvim_set_hl(0, "@markdown.heading.6", { fg = "#88c0d0", bold = true })
+vim.api.nvim_set_hl(0, "@markdown.list.checked", { fg = "#a3be8c", bold = false })
+vim.api.nvim_set_hl(0, "@markdown.list.unchecked", { fg = "#e5e9f0", bold = false })
+vim.api.nvim_set_hl(0, "@markdown.list", { fg = "#e5e9f0", bold = false })
+
+-- Link the custom highlight groups to Treesitter's markdown heading captures
+vim.api.nvim_set_hl(0, "@markup.heading.1.markdown", { link = "@markdown.heading.1" })
+vim.api.nvim_set_hl(0, "@markup.heading.2.markdown", { link = "@markdown.heading.2" })
+vim.api.nvim_set_hl(0, "@markup.heading.3.markdown", { link = "@markdown.heading.3" })
+vim.api.nvim_set_hl(0, "@markup.heading.4.markdown", { link = "@markdown.heading.4" })
+vim.api.nvim_set_hl(0, "@markup.heading.5.markdown", { link = "@markdown.heading.5" })
+vim.api.nvim_set_hl(0, "@markup.heading.6.markdown", { link = "@markdown.heading.6" })
+vim.api.nvim_set_hl(0, "@markup.list.checked.markdown", { link = "@markdown.list.checked" })
+vim.api.nvim_set_hl(0, "@markup.list.unchecked.markdown", { link = "@markdown.list.unchecked" })
+vim.api.nvim_set_hl(0, "@markup.list.markdown", { link = "@markdown.list" })

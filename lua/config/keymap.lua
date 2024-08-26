@@ -22,6 +22,7 @@ function keymaps.M_unused()
 	unM({ "n", "i", "v" }, "<C-w>>")
 	unM({ "n", "i", "v" }, "<C-w>+")
 	unM({ "n", "i", "v" }, "<C-w>-")
+	unM({ "n", "i", "v" }, "<C-w>r")
 	unM({ "n" }, "Q")
 end
 
@@ -65,16 +66,8 @@ end
 
 ------------------------------------------------------------------------------
 function keymaps.M_buftabwin()
-	M("n", "<Tab>", ":bn<cr>", { desc = "Last tab/buffer", noremap = true, silent = true })
-	M("n", "<C-Tab>", ":bp<cr>", { desc = "First tab/buffer", noremap = true, silent = true })
-	--------------------------------------------------------
-	M("n", "<leader>tl", ":tabnext<cr>", { desc = "[T]ab next", noremap = true, silent = true })
-	M("n", "<leader>th", ":tabprevious<cr>", { desc = "[T]ab previous", noremap = true, silent = true })
-	M("n", "<leader>tj", ":tablast<cr>", { desc = "[T]ab last", noremap = true, silent = true })
-	M("n", "<leader>tk", ":tabfirst<cr>", { desc = "[T]ab first", noremap = true, silent = true })
-	M("n", "<leader>tn", ":tabnew<cr>", { desc = "[T]ab [N]ew", noremap = true, silent = true })
-	M("n", "<leader>tc", ":tabclose<cr>", { desc = "[T]ab [C]lose", noremap = true, silent = true })
-	M("n", "<leader>to", ":tabonly<cr>", { desc = "[T]ab [O]nly", noremap = true, silent = true })
+	M("n", "gb>", "<cmd>bn<cr>", { desc = "[G]o to next buffer", noremap = true, silent = true })
+	M("n", "gB", "<cmd>bp<cr>", { desc = "[G]o to prev buffer", noremap = true, silent = true })
 	--------------------------------------------------------
 	--  seemlessly navigate between split windows
 	M("n", "<C-h>", ":wincmd h<cr>", { desc = "Move focus to the left window" })
@@ -95,10 +88,10 @@ function keymaps.M_buftabwin()
 	M("n", "<C-Down>", ":resize -10<CR>", { silent = true })
 
 	--  windows manipulations
-	M("n", '<C-w>"', ":horizontal split<CR>", { desc = "Split window horizontally", silent = true })
-	M("n", "<C-w>%", ":vertical split<CR>", { desc = "Split window vertically", silent = true })
-	M("n", "<C-w>n", ":wincmd x<CR>", { desc = "Swap current window with [n]ext", silent = true })
-	M("n", "<C-w>p", ":wincmd p<CR> :wincmd x<CR>", { desc = "Swap current window with [p]revious", silent = true })
+	M("n", '<C-w>"', "<cmd>split<cr>", { noremap = true, desc = "Split window horizontally", silent = true })
+	M("n", "<C-w>%", "<cmd>vsplit<cr>", { noremap = true, desc = "Split window vertically", silent = true })
+	M("n", "<C-w>n", "<cmd>wincmd x<cr>", { desc = "Swap current window with [n]ext", silent = true })
+	M("n", "<C-w>p", "<cmd>wincmd p | wincmd x<cr>", { desc = "Swap current window with [p]revious", silent = true })
 
 	--  window equalize, maximize on height/width
 	M("n", "<C-w>mh", ":resize<CR>", { desc = "Max out [h]eight", silent = true })
@@ -134,14 +127,14 @@ function keymaps.M_info()
 	end
 
 	M("n", "<C-g>i", function()
-		vim.notify(info())
+		vim.notify(info(), vim.log.levels.INFO)
 	end, { silent = true, noremap = false, desc = "Get [I]nfomation" })
 end
 
 ------------------------------------------------------------------------------
 keymaps.M_oil = {
-	{ "-", "<cmd>Oil .<cr>", "Open oil in parent dir" },
-	{ "<leader>ed", "<cmd>Oil<cr>", "[ED]it explorer" },
+	{ "-", "<cmd>Oil --float<cr>", "Open oil in parent dir" },
+	{ "<leader>ed", "<cmd>Oil<cr>", "[E]xplorer [E]dit" },
 }
 
 ------------------------------------------------------------------------------
@@ -344,9 +337,19 @@ function keymaps.M_lsp(event)
 	M_local("<leader>ws", vim.lsp.buf.workspace_symbol, "[W]orkspace [S]ymbols")
 	M_local("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
 	M_local("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
-	-- M_local("<leader>ds", function()
-	-- 	require("mini.extra").pickers.lsp({ scope = "document_symbol" })
-	-- end, "[D]ocument [S]ymbols")
+	M_local("<leader>ds", function()
+		require("telescope.builtin").lsp_document_symbols(require("telescope.themes").get_ivy({
+			border = false,
+			layout_config = {
+				height = function(_, _, rows)
+					return rows
+				end,
+				width = function(_, cols, _)
+					return cols
+				end,
+			},
+		}))
+	end, "[D]ocument [S]ymbols")
 	M_local("K", vim.lsp.buf.hover, "Code hover")
 end
 
@@ -402,8 +405,6 @@ function keymaps.M_fidget()
 end
 
 ------------------------------------------------------------------------------
---> TODO: change this to return table as telescope should be load when trigger certain keybind
-
 -- load plugin on key bind
 ---@param key string
 ---@param desc string
@@ -414,7 +415,9 @@ local function M_lazy_telescope(key, action_name, desc)
 		key,
 		function()
 			if type(action_name) == "string" then
-				require("telescope.builtin")[action_name]()
+				require("telescope.builtin")[action_name]({
+					prompt_title = desc,
+				})
 			elseif type(action_name) == "function" then
 				return action_name()
 			end
@@ -425,9 +428,6 @@ end
 
 keymaps.M_telescope = {
 	M_lazy_telescope("<leader>ff", "find_files", "[F]ind [F]iles"),
-	M_lazy_telescope("<leader>fh", "help_tags", "[F]ind [H]elp"),
-	M_lazy_telescope("<leader>fk", "keymaps", "[F]ind [K]eymaps"),
-	M_lazy_telescope("<leader>fs", "builtin", "[F]ind [F]elect Telescope"),
 	M_lazy_telescope("<leader>fw", "grep_string", "[F]ind current [W]ord"),
 	M_lazy_telescope("<leader>fg", "live_grep", "[F]ind by [G]rep"),
 	M_lazy_telescope("<leader>fd", "diagnostics", "[F]ind [D]iagnostics"),
@@ -435,27 +435,92 @@ keymaps.M_telescope = {
 	M_lazy_telescope("<leader>fo", "oldfiles", '[F]ind [O]ld Recent Files ("." for repeat)'),
 	M_lazy_telescope("<leader>fc", "colorscheme", "[F]ind [C]olorschemes"),
 	M_lazy_telescope("<leader><leader>", "buffers", "[ ] Find existing buffers"),
-	M_lazy_telescope("<leader>/", function()
-		require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-			winblend = 10,
-			previewer = false,
+
+	M_lazy_telescope("<leader>fs", function()
+		require("telescope.builtin").builtin(require("telescope.themes").get_ivy({
+			border = false,
+			layout_config = {
+				height = function(_, _, rows)
+					return rows
+				end,
+				width = function(_, cols, _)
+					return cols
+				end,
+			},
 		}))
+	end, "[F]ind [F]elect Telescope"),
+
+	M_lazy_telescope("<leader>fk", function()
+		require("telescope.builtin").keymaps(require("telescope.themes").get_ivy({
+			border = false,
+			layout_config = {
+				height = function(_, _, rows)
+					return rows
+				end,
+				width = function(_, cols, _)
+					return cols
+				end,
+			},
+		}))
+	end, "[F]ind [K]eymaps"),
+
+	M_lazy_telescope("<leader>fh", function()
+		--- overide default ui setting
+		require("telescope.builtin").help_tags(require("telescope.themes").get_ivy({
+			preview = true,
+			border = false,
+			layout_config = {
+				height = function(_, _, rows)
+					return rows
+				end,
+				width = function(_, cols, _)
+					return cols
+				end,
+				preview_width = 0.6,
+			},
+		}))
+	end, "[F]ind [H]elp"),
+
+	M_lazy_telescope("<leader>/", function()
+		require("telescope.builtin").current_buffer_fuzzy_find()
 	end, "[/] Fuzzily search in current buffer"),
+
 	M_lazy_telescope("<leader>f/", function()
 		require("telescope.builtin").live_grep({
 			grep_open_files = true,
-			prompt_title = "Live Grep in Open Files",
+			prompt_title = "[F]ind [/] in Open Files",
 		})
 	end, "[F]ind [/] in Open Files"),
+
 	M_lazy_telescope("<leader>fp", function()
-		require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
-	end, "[F]ind neovim [Plugins]"),
-	M_lazy_telescope("<leader>ee", function()
+		require("telescope.builtin").find_files({
+			cwd = vim.fn.stdpath("config"),
+			prompt_title = "[F]ind [P]lugins",
+		})
+	end, "[F]ind [P]lugins"),
+
+	M_lazy_telescope("<leader>ft", function()
+		require("telescope.builtin").treesitter(require("telescope.themes").get_ivy({
+			preview = true,
+			border = false,
+			layout_config = {
+				height = function(_, _, rows)
+					return rows
+				end,
+				width = function(_, cols, _)
+					return cols
+				end,
+			},
+		}))
+	end, "[F]ind [T]reesiter"),
+
+	M_lazy_telescope("<leader>eo", function()
 		require("telescope").extensions.file_browser.file_browser({
 			path = "%:p:h",
 			select_buffer = true,
+			prompt_title = "[E]xplorer [O]pen",
 		})
-	end, "Open explorer in current dir"),
+	end, "[F]ile [B]rowser"),
 }
 
 ------------------------------------------------------------------------------
@@ -479,4 +544,22 @@ function keymaps.M_obsidian()
 	end, { noremap = true, silent = true, desc = "Obsidian create new note from templates" })
 end
 
+------------------------------------------------------------------------------
+keymaps.M_zenmode = {
+	{ "Z", "<cmd>ZenMode<cr>", "Toggle Zenmode" },
+}
+------------------------------------------------------------------------------
+function keymaps.M_aerial()
+	M("n", "<leader>a", function()
+		local ok, toggle = pcall(require("aerial").toggle)
+		if ok then
+			return toggle
+		else
+			vim.notify("Unable to load aerial", vim.log.levels.WARN)
+			return
+		end
+	end, { noremap = true, silent = true, desc = "[A]erial [T]oggle" })
+end
+
+------------------------------------------------------------------------------
 return keymaps

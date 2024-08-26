@@ -149,6 +149,7 @@ end
 function autocmds.resize_splits_after_win_resize()
 	api.nvim_create_autocmd("FileType", {
 		pattern = "*",
+		group = autocmds.group_id,
 		desc = "Auto resize splits after window resize",
 		command = "wincmd =",
 	})
