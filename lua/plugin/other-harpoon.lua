@@ -5,7 +5,7 @@ return {
 	dependencies = { "nvim-lua/plenary.nvim" },
 	config = function()
 		require("harpoon"):setup({
-			exclude_filetypes = { "harpoon", "oil", "ministarter" },
+			exclude_filetypes = { "harpoon", "oil" },
 		})
 		require("config.keymap").M_harpoon()
 	end,

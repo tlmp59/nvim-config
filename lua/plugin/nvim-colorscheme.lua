@@ -1,27 +1,51 @@
 return {
 	{
-		"RRethy/base16-nvim",
-		priority = 1000, -- Make sure to load this before all the other start plugins.
+		"folke/tokyonight.nvim",
+		lazy = false,
+		priority = 1000,
+		opts = {
+			transparent = true,
+			style = "storm", -- The theme comes in three styles, `storm`, a darker variant `night` and `day`
+			styles = {
+				comments = { italic = true },
+				keywords = { italic = true },
+				functions = {},
+				variables = {},
+				-- Background styles. Can be "dark", "transparent" or "normal"
+				sidebars = "transparent",
+				floats = "transparent",
+				plugins = {
+					all = package.loaded.lazy == nil,
+					auto = true,
+				},
+			},
+			on_highlights = function(hl, c)
+				hl.WinBar = {
+					bg = "NONE",
+					fg = c.fg_dark,
+				}
+				hl.WinBarNC = {
+					bg = "NONE",
+					fg = c.fg_light,
+				}
+
+				hl.TreesitterContext = {
+					bg = "NONE",
+				}
+				hl.TreesitterContextBottom = {
+					underline = true,
+				}
+				hl.TreesitterContextLineNumberBottom = {
+					underline = true,
+				}
+
+				hl.WinSeparator = {
+					fg = c.fg_dark,
+				}
+			end,
+		},
 		init = function()
-			vim.cmd.colorscheme("base16-default-dark")
-		end,
-		config = function()
-			require("base16-colorscheme").with_config({
-				telescope = false,
-			})
+			vim.cmd.colorscheme("tokyonight")
 		end,
 	},
-	-- {
-	-- 	"rmehri01/onenord.nvim",
-	-- 	priority = 1000, -- Make sure to load this before all the other start plugins.
-	-- 	init = function()
-	-- 		vim.cmd.colorscheme("onenord")
-	-- 	end,
-	-- },
-	-- {
-	-- 	"Mofiqul/vscode.nvim",
-	-- },
-	-- {
-	-- 	"olivercederborg/poimandres.nvim",
-	-- },
 }

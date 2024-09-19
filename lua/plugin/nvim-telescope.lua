@@ -12,14 +12,16 @@ return {
 				end,
 			},
 			{ "nvim-telescope/telescope-ui-select.nvim" },
-			{ "nvim-telescope/telescope-file-browser.nvim" },
 			{ "nvim-tree/nvim-web-devicons" },
+
+			-- add extra extensions here
 		},
 		keys = require("config.keymap").M_telescope, --- use to trigger plugin when first press keybind
+		cmd = "Telescope",
 		config = function()
 			local actions = require("telescope.actions")
 			require("telescope").setup({
-				--- source: https://github.com/nvim-telescope/telescope.nvim/issues/848
+				--- set default selection ui for telescope: https://github.com/nvim-telescope/telescope.nvim/issues/848
 				defaults = vim.tbl_extend(
 					"force",
 					require("telescope.themes").get_ivy({
@@ -66,14 +68,9 @@ return {
 					},
 				},
 
+				-- extensions config
 				extensions = {
 					["ui-select"] = {},
-
-					file_browser = {
-						hijack_netrw = false,
-						git_status = false,
-						previewer = false,
-					},
 
 					fzf = {
 						fuzzy = false, -- false will only do exact matching
@@ -87,7 +84,6 @@ return {
 			-- enable Telescope extensions if they are installed
 			pcall(require("telescope").load_extension, "fzf")
 			pcall(require("telescope").load_extension, "ui-select")
-			pcall(require("telescope").load_extension, "file_browser")
 		end,
 	},
 }

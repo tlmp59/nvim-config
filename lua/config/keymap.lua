@@ -56,17 +56,11 @@ function keymaps.M_utils()
 	--  move selected up and down
 	M("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
 	M("v", "K", ":m '<-2<CR>gv=gv", { silent = true })
-
-	-- primeagen cool keymaps
-	M("x", "<leader>p", [["_dP]])
-	M({ "n", "v" }, "<leader>y", [["+y]])
-	M("n", "<leader>Y", [["+Y]])
-	M({ "n", "v" }, "<leader>dd", [["_d]])
 end
 
 ------------------------------------------------------------------------------
 function keymaps.M_buftabwin()
-	M("n", "gb>", "<cmd>bn<cr>", { desc = "[G]o to next buffer", noremap = true, silent = true })
+	M("n", "gb", "<cmd>bn<cr>", { desc = "[G]o to next buffer", noremap = true, silent = true })
 	M("n", "gB", "<cmd>bp<cr>", { desc = "[G]o to prev buffer", noremap = true, silent = true })
 	--------------------------------------------------------
 	--  seemlessly navigate between split windows
@@ -133,8 +127,8 @@ end
 
 ------------------------------------------------------------------------------
 keymaps.M_oil = {
-	{ "-", "<cmd>Oil --float<cr>", "Open oil in parent dir" },
-	{ "<leader>ed", "<cmd>Oil<cr>", "[E]xplorer [E]dit" },
+	{ "-", "<cmd>Oil --float<cr>", "Open explorer in parent dir" },
+	{ "<leader>ed", "<cmd>Oil .<cr>", "[E]xplorer [E]dit in CWD" },
 }
 
 ------------------------------------------------------------------------------
@@ -513,53 +507,63 @@ keymaps.M_telescope = {
 			},
 		}))
 	end, "[F]ind [T]reesiter"),
-
-	M_lazy_telescope("<leader>eo", function()
-		require("telescope").extensions.file_browser.file_browser({
-			path = "%:p:h",
-			select_buffer = true,
-			prompt_title = "[E]xplorer [O]pen",
-		})
-	end, "[F]ile [B]rowser"),
 }
-
-------------------------------------------------------------------------------
-function keymaps.M_obsidian()
-	local obsidian = require("obsidian")
-	M("n", "<leader>of", function()
-		if obsidian.util.cursor_on_markdown_link() then
-			return "<cmd>ObsidianFollowLink<cr>"
-		else
-			vim.notify("Not an obsidian link", vim.log.levels.WARN)
-		end
-	end, { noremap = true, silent = true, desc = "Obsidian follow link" })
-	M(
-		"n",
-		"<leader>on",
-		"<cmd>ObsidianNewFromTemplate<cr>",
-		{ noremap = true, silent = true, desc = "Obsidian create new note from templates" }
-	)
-	M({ "n", "v" }, "<leader>oc", function()
-		return obsidian.util.toggle_checkbox()
-	end, { noremap = true, silent = true, desc = "Obsidian create new note from templates" })
-end
 
 ------------------------------------------------------------------------------
 keymaps.M_zenmode = {
 	{ "Z", "<cmd>ZenMode<cr>", "Toggle Zenmode" },
 }
-------------------------------------------------------------------------------
-function keymaps.M_aerial()
-	M("n", "<leader>a", function()
-		local ok, toggle = pcall(require("aerial").toggle)
-		if ok then
-			return toggle
-		else
-			vim.notify("Unable to load aerial", vim.log.levels.WARN)
-			return
-		end
-	end, { noremap = true, silent = true, desc = "[A]erial [T]oggle" })
-end
 
+keymaps.M_yazi = {
+	{ "-", "<cmd>Yazi<cr>", "Toggle file explorer" },
+	{ "<leader>e", "<cmd>Yazi cwd<cr>", "Toggle file explorer in cwd" },
+}
+
+function keymaps.M_quarto()
+	--> add code chunk
+	local is_code_chunk = function()
+		local current, _ = require("otter.keeper").get_current_language_context()
+		if current then
+			return true
+		else
+			return false
+		end
+	end
+	--- @param lang string
+	local function insert_code_chunk(lang)
+		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<esc>", true, false, true), "n", true)
+		local keys
+		if is_code_chunk() then
+			keys = [[o```<cr><cr>```{]] .. lang .. [[}<esc>o]]
+		else
+			keys = [[o```{]] .. lang .. [[}<cr>```<esc>O]]
+		end
+		keys = vim.api.nvim_replace_termcodes(keys, true, false, true)
+		vim.api.nvim_feedkeys(keys, "n", false)
+	end
+	M("n", "<leader>qip", function()
+		insert_code_chunk("python")
+	end, { desc = "Quarto insert python code chunk" })
+	M("n", "<leader>qir", function()
+		insert_code_chunk("r")
+	end, { desc = "Quarto insert python code chunk" })
+
+	---
+	local insert_intro = function()
+		local lines = {
+			"---",
+			"title: ",
+			"format:",
+			"  html:",
+			"    code-fold: true",
+			"jupyter: python3",
+			"---",
+		}
+		vim.api.nvim_put(lines, "l", true, true)
+	end
+	M("n", "<leader>qii", function()
+		insert_intro()
+	end, { desc = "Quarto insert intro" })
+end
 ------------------------------------------------------------------------------
 return keymaps

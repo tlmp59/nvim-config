@@ -49,8 +49,9 @@ function setting.opt_global()
 	--  confirm for unsaved file
 	opt.confirm = true
 
-	--  make messages more visable
-	opt.shortmess = "aoOstTWAIcCFSqW"
+	--  make messages more visable -> this somehow disable greeting
+	-- opt.shortmess = "aoOstTWAIcCFSqW"
+	opt.shortmess = "aoOstTWAcCFSqW"
 
 	--  control how the screen is adjusted when a new window (split) is opened
 	opt.splitkeep = "screen"
@@ -98,7 +99,7 @@ function setting.opt_global()
 	opt.inccommand = "split" -- other opts: 'split', ''
 
 	--  show which line the cursor is on
-	opt.cursorline = true
+	opt.cursorline = false
 
 	--  configure backup option
 	opt.swapfile = false
@@ -114,7 +115,7 @@ function setting.opt_global()
 	opt.termguicolors = true
 
 	--  configure conceallevel
-	opt.conceallevel = 2 --> "conceal" is a way to simplify the visual presentation of text while preserving the full content in the file
+	opt.conceallevel = 0 --> "conceal" is a way to simplify the visual presentation of text while preserving the full content in the file
 
 	-- optiont tab indent
 	opt.tabstop = 4
@@ -140,9 +141,6 @@ function setting.opt_global()
 	--  make mouse movement smoother
 	opt.smoothscroll = true
 
-	--  dsiable statusline on startup
-	o.laststatus = 0
-
 	--  configure how completion menus behave
 	o.completeopt = "menuone,noselect" --> show popup menu even there is only one match and do not select anything from there
 
@@ -160,6 +158,7 @@ end
 function setting.opt_local()
 	--  tweaking winbar
 	local opts = "%f"
+	-- local opts = ""
 	require("config.autocmd").local_winbar(opts)
 end
 

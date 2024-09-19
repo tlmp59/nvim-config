@@ -1,8 +1,3 @@
--- TODO: write a tutorial for this part
--- - parameter
--- - field
--- - class
-
 local api = vim.api
 
 ---@class UserAutoCmds
@@ -61,6 +56,7 @@ function autocmds.hide_unnamed_buf_on_startup()
 			return
 		end
 		vim.bo[buf].buflisted = false
+		vim.bo[buf].bufhidden = "wipe"
 	end
 
 	local unlist_unnamed_all = function()
@@ -156,5 +152,4 @@ function autocmds.resize_splits_after_win_resize()
 end
 
 ------------------------------------------------------------------------------
-function autocmds.testing() end
 return autocmds

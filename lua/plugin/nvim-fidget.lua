@@ -7,7 +7,7 @@ return {
 				override_vim_notify = true,
 				window = {
 					normal_hl = "Normal",
-					winblend = 10,
+					winblend = 0,
 					border = "",
 					zindex = 45,
 					max_width = 0,

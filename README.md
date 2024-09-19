@@ -7,7 +7,8 @@ In this repository, i will try to cover:
 - Neovim --> a blazingly fast text editor that work just like an IDE
 - Tmux --> an amazing tool that help with managing multiple terminal at once
 - Wezterm --> a powerful cross-platform terminal emulator written in rust
-- Fishshell --> (potential?) currently using Zsh
+- Z shell --> an amazing terminal shell
+- Keyboard --> keyboard with macro to improve productivity (maybe i should make this a seperate repo)
 
 My goal when it comes to configure these tools are:
 - As minimal as possible (prevent distraction)
@@ -32,66 +33,7 @@ My config was made possible thank to ['kickstart.nvim'](https://github.com/nvim-
 
 ### Neovim
 <details><summary> Linux/WSL </summary>
-
 ```sh
 git clone https://github.com/ov3ipo/neovim "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
 ```
-
 </details>
-
-## Todolist
-~progess
-- [ ] continue on configure for obsidian nvim
-
-~other
-- [ ] enable syncthing for syncing between devices for obsidian
-
-~neovim
-- [ ] integrated quarto with jupytertext for notebook edit
-- [ ] fix error with markdown file linting
-
-- [ ] PROBLEM with neovim diagnostic, it keep poping up update when typing --> perhaps can be due to lsp event enter, recheck with kickstart module
-
-- [ ] setup to show git branch on winbar
-- [ ] setup with gx command "chrishrb/gx.nvim",
-- [ ] a way to replace bufmanager? [Telescope close buffers under cursor](https://github.com/nvim-telescope/telescope.nvim/issues/621)
-
-- [ ] setup <c-g> keybind to show gits related status
-
-
-- [ ] automatically create a new file when telescope does not found --> should ask for user input filetype
-
-- [ ] reduce loading time by loading plugins for certain file type only
-   - [ ] trouble
-   - [x] telescope
-   - [x] oil 
-   - [ ] quarto
-
-- [ ] create a script (user_cmd) to open current buffer file in corresponding defautl application
-    - [ ] search for how to change folder permission to read-only
-
-
-~tmux
-
-~done
-- [x] Make open experience better with oil and starter
-- [x] configure custom statusline using opt local --> end up not using it replace with keymap to echo buffers information
-- [x] setup undotree
-- [x] nvim navic --> repace with nvim-treesitter-context
-- [x] hide cmdline when open mini.pick --> plugin issue wait for solution
-- [x] create a winbar to separate buffers, since it kinda hard to see file under, winbar should include
-- - [x] filename
-- - [x] filetype
-- - [x] fileencoding
-- [x] ricing tmux --> got the first step this can took longer than i thought
-- [x] let oil lazy load and use telescope file brownser instead --> telescope-file-browser is a bit slow on large file (solve -> just disable git_status opt)
-- [x] PROBLEM with finds colorscheme, seem like some how is doesnt work --> use telescope
-- [x] increase startup time [Neovim & Lazy - Blazingly Fast Startup](https://www.youtube.com/watch?v=7vPwPx9u5cc)
-- [x] investigate on [LazyVim](https://github.com/LazyVim/LazyVim) for how they manage plugins for best performance --> currently serve bset at under 40ms
-- [x] migrating to nord theme?
-- [x] add sticky buf to prevent open file in unwanted spot
-
-# Note
-In lazy config
-- keymaps --> keybind will trigger the plugins when first press
-- cmd --> first call the cmd in cmdline will trigger the plugin
