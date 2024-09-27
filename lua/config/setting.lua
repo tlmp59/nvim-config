@@ -71,10 +71,6 @@ function setting.opt_global()
 
 	--  toggle word wrap
 	opt.wrap = false
-	opt.breakindent = false -- require wrap = true for this to take effect, this allow to preserve the indentaion of a line when it wraps to the next line
-	-- opt.breakindent = "list:-1"
-	-- opt.breakindentopt = "shift:2"
-	-- opt.linebreak = true
 
 	--  autoindent
 	opt.autoindent = true --> copy indent from current line when starting new one
@@ -87,8 +83,8 @@ function setting.opt_global()
 	opt.signcolumn = "yes" --> a vertical area on the left side of the editor window, typically used to show various indicators or symbols
 
 	--  configure on Vim wait time for certain sequences
-	opt.updatetime = 250 --> how long Vim waits after stop typing before trigger certain events
-	opt.timeoutlen = 1000 -- other options: "no", "auto", "number"
+	opt.updatetime = 50 --> how long Vim waits after stop typing before trigger certain events
+	-- opt.timeoutlen = 250 -- other options: "no", "auto", "number"
 	--> how long Vim waits for a mapped sequence to complete if not completed within time Vim will execute the partial mapping or key code
 
 	--  configure how new splits should be opened
@@ -99,7 +95,7 @@ function setting.opt_global()
 	opt.inccommand = "split" -- other opts: 'split', ''
 
 	--  show which line the cursor is on
-	opt.cursorline = false
+	opt.cursorline = true
 
 	--  configure backup option
 	opt.swapfile = false
@@ -108,20 +104,20 @@ function setting.opt_global()
 	opt.undofile = true
 
 	--  searching options
-	opt.hlsearch = true --> highlight search set to false won't keep all matches highlighted after a search
-	opt.incsearch = true --> automatic jump to the first partially matches with inputs
+	opt.hlsearch = false -- highlight search set to false won't keep all matches highlighted after a search
+	opt.incsearch = true -- automatic jump to the first partially matches with inputs
 
 	--  enable termguicolors
 	opt.termguicolors = true
 
 	--  configure conceallevel
-	opt.conceallevel = 0 --> "conceal" is a way to simplify the visual presentation of text while preserving the full content in the file
+	opt.conceallevel = 0 -- "conceal" is a way to simplify the visual presentation of text while preserving the full content in the file
 
 	-- optiont tab indent
 	opt.tabstop = 4
 	opt.softtabstop = 4
 	opt.shiftwidth = 4
-	opt.expandtab = true --> instead of inserting a single tab character set this to true will instead insert an equivalent number of space characters
+	opt.expandtab = true -- instead of inserting a single tab character set this to true will instead insert an equivalent number of space characters
 
 	--  minimal number fo screen lines to keep above and below cursor
 	opt.scrolloff = 10
@@ -132,34 +128,29 @@ function setting.opt_global()
 	opt.list = true
 	opt.listchars = { tab = "| ", trail = "·", nbsp = "␣" }
 
-	--  disable show the mode, since it's already in the status line
-	opt.showmode = false
-
-	--  make sure that statusline is comletely disable
-	opt.statusline = "%#Normal#"
-
 	--  make mouse movement smoother
 	opt.smoothscroll = true
 
+	--  make cursor a single block
+	opt.guicursor = ""
+
 	--  configure how completion menus behave
-	o.completeopt = "menuone,noselect" --> show popup menu even there is only one match and do not select anything from there
+	o.completeopt = "menuone,noselect" -- show popup menu even there is only one match and do not select anything from there
 
 	--  hide tabline
-	o.showtabline = 0
+	o.showtabline = 1
 
 	--  hide statusline
 	o.laststatus = 0
 
-	--  hide command line
-	o.cmdheight = 1
-end
+	--  make sure that statusline is comletely disable
+	opt.statusline = "%#Normal#"
 
-------------------------------------------------------------------------------
-function setting.opt_local()
-	--  tweaking winbar
-	local opts = "%f"
-	-- local opts = ""
-	require("config.autocmd").local_winbar(opts)
+	--  enable showmode, useful when disable statusline
+	opt.showmode = false
+
+	--  toggle command line
+	o.cmdheight = 1
 end
 
 ------------------------------------------------------------------------------

@@ -3,7 +3,6 @@ vim.loader.enable()
 -- load setting for setup
 local setting = require("config.setting")
 setting.opt_global()
-setting.opt_local()
 
 -- load default keymaps before load plugins
 local keymap = require("config.keymap")
@@ -20,3 +19,6 @@ local autocmd = require("config.autocmd")
 autocmd.restore_cursor_position_in_file()
 autocmd.hl_yanked_text()
 autocmd.hide_unnamed_buf_on_startup()
+
+-- load winbar
+require("config.status").get_winbar()

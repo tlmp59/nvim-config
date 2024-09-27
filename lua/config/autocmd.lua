@@ -7,37 +7,6 @@ local autocmds = {
 }
 
 ------------------------------------------------------------------------------
----@param plugin_name string
----@param plugin_open fun(path: string) function to open file browser
-function autocmds.attach_file_browser(plugin_name, plugin_open)
-	local prev_buffer_name
-	api.nvim_create_autocmd("BufEnter", {
-		group = autocmds.group_id,
-		desc = string.format("%s replacement for default file browser", plugin_name),
-		pattern = "*",
-		callback = function()
-			vim.schedule(function()
-				local buffer_name = api.nvim_buf_get_name(0)
-				if vim.fn.isdirectory(buffer_name) == 0 then
-					_, prev_buffer_name = pcall(vim.fn.expand, "#:p:h")
-					return
-				end
-
-				if prev_buffer_name == buffer_name then
-					prev_buffer_name = nil
-					return
-				else
-					prev_buffer_name = buffer_name
-				end
-
-				api.nvim_set_option_value("bufhidden", "wipe", { buf = 0 })
-				plugin_open(vim.fn.expand("%:p:h"))
-			end)
-		end,
-	})
-end
-
-------------------------------------------------------------------------------
 function autocmds.hl_yanked_text()
 	api.nvim_create_autocmd("TextYankPost", {
 		group = autocmds.group_id,
@@ -109,25 +78,6 @@ function autocmds.underline_word_under_cursor(event)
 			end,
 		})
 	end
-end
-
-------------------------------------------------------------------------------
----@param opts string
-function autocmds.local_winbar(opts)
-	api.nvim_create_autocmd("BufWinEnter", {
-		pattern = "*",
-		group = autocmds.group_id,
-		desc = "Enable winbar on buffers enter",
-		callback = function()
-			vim.schedule(function()
-				if vim.bo.buflisted then
-					vim.opt_local.winbar = opts
-				else
-					vim.opt_local.winbar = nil
-				end
-			end)
-		end,
-	})
 end
 
 ------------------------------------------------------------------------------
