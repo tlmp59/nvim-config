@@ -102,4 +102,11 @@ function autocmds.resize_splits_after_win_resize()
 end
 
 ------------------------------------------------------------------------------
+function autocmds.testing()
+	api.nvim_create_autocmd("FileType", {
+		pattern = "*",
+		desc = "This is a test function",
+	})
+end
+------------------------------------------------------------------------------
 return autocmds
