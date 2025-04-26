@@ -1,4 +1,4 @@
-<h3 aligin="center"> Following Advent Neovim <\h3>
+<h3 aligin="center"> Following Advent Neovim </h3>
 
 ### Chapter 1: Lua - The foundation
 - Write something about lua its origin, why it was chosen to be neovim config language
@@ -7,7 +7,7 @@
 
 Variables, Functions, Loops, Data structures, Modules, etc.
 
-<p align="center">Loops<\p>
+<p align="center">Loops</p>
 ```lua
 local rand_list = { "apple", "orange", "banana" }
 
@@ -33,7 +33,7 @@ for k, v in pairs(rand_map) do -- think pairs as a pair of key and value
   print(k, v)
 end
 ```
-<p align="center">Function<\p>
+<p align="center">Function</p>
 ```lua
 -- multiple return
 local return_four_values = functions()
@@ -47,7 +47,7 @@ print(last)
 -- the '4' did not get assigned hence it is discarded
 ```
 
-<p align="center">Condition<\p>
+<p align="center">Condition</p>
 ```lua
 local function action(x)
   if x then
@@ -55,7 +55,7 @@ local function action(x)
   else
     print("x is falsey") -- when x = false; nil
 ```
-<p align="center">Modules<\p>
+<p align="center">Modules</p>
 There isn't anything special about modules, they are just simply files!
 ```lua
 -- foo.lua
