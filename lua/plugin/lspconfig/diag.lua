@@ -28,7 +28,7 @@ vim.diagnostic.config({
 	},
 })
 
--- Override the virtual text diagnostic handler so that the most severe diagnostic is shown first --
+-- Prioritize servere diagnostic to show first
 -- source: https://github.com/MariaSolOs/dotfiles/blob/main/.config/nvim/lua/lsp.lua#L184
 local show_handler = vim.diagnostic.handlers.virtual_text.show
 assert(show_handler)

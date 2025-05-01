@@ -1,4 +1,4 @@
-local pconf = "plugin.extra.snacks."
+local pconf = "pextra.snacks."
 
 return {
 	"folke/snacks.nvim",

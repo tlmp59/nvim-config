@@ -24,6 +24,7 @@ return {
 			lua = { "stylua" },
 			python = { "isort", "black" },
 			-- For filetypes without a formatter:
+			nix = { "alejandra" },
 			["_"] = { "trim_whitespace", "trim_newlines" },
 
 			-- You can use 'stop_after_first' to run the first available formatter from the list

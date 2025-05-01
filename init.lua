@@ -2,21 +2,15 @@ vim.loader.enable()
 
 -- Set leader key before loading plugins
 vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+vim.g.maplocalleader = "\\"
 
 -- Enable nerd font support
 vim.g.have_nerd_font = true
 
--- Import other modules
-require("option")
-
-require("autocmd")
-
-require("diagnostic")
-
-require("winbar").get_winbar()
-
-require("lsp")
+-- Import config modules
+vim.iter(vim.api.nvim_get_runtime_file("lua/*.lua", true)):map(function(file)
+	require(vim.fn.fnamemodify(file, ":t:r"))
+end)
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -38,12 +32,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Setup lazy.nvim
-require("lazy").setup({
-	spec = {
-		{ import = "plugin/core" },
-		{ import = "plugin/extra" },
-	},
-
+require("lazy").setup('plugin', {
 	change_detection = { notify = false },
 	rocks = { enabled = false },
 })
