@@ -8,6 +8,7 @@
 Variables, Functions, Loops, Data structures, Modules, etc.
 
 <p align="center">Loops</p>
+
 ```lua
 local rand_list = { "apple", "orange", "banana" }
 
@@ -15,7 +16,7 @@ for i = 1, #rand_list do
   print(i, rand_list[i])
 end
 
---[[ 
+--[[
     return:
      1 apple
      2 orange
@@ -34,6 +35,7 @@ for k, v in pairs(rand_map) do -- think pairs as a pair of key and value
 end
 ```
 <p align="center">Function</p>
+
 ```lua
 -- multiple return
 local return_four_values = functions()
@@ -46,8 +48,8 @@ print(second)
 print(last)
 -- the '4' did not get assigned hence it is discarded
 ```
-
 <p align="center">Condition</p>
+
 ```lua
 local function action(x)
   if x then
@@ -56,6 +58,7 @@ local function action(x)
     print("x is falsey") -- when x = false; nil
 ```
 <p align="center">Modules</p>
+
 There isn't anything special about modules, they are just simply files!
 ```lua
 -- foo.lua
@@ -70,6 +73,7 @@ local foo = require('foo') -- assume foo.lua and bar.lua are in the same directo
 foo.cool_func()
 ```
 <p align="center">Metatables<\p>
+
 A thing that contains information about a table
 ```lua
 __add
