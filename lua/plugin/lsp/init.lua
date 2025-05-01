@@ -14,6 +14,7 @@ return {
 	},
 
 	config = function()
+		local pconf = "plugin.lsp."
 		-- LSP keymaps and autocmds --
 		-- source: https://github.com/MariaSolOs/dotfiles/blob/main/.config/nvim/lua/lsp.lua#L9
 		local methods = vim.lsp.protocol.Methods
@@ -101,6 +102,6 @@ return {
 		})
 
 		-- Diagnostic config --
-		require("plugin.core.lsp.diag")
+		require(pconf .. "diag")
 	end,
 }

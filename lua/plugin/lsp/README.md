@@ -1,11 +1,5 @@
-<h3> Must have plugins in every config </h3>
+<h3>LSP</h3>
 
----
-### Treesitter
-By default neovim come with treesitter builtin, this get mentioned on the offical [documentation](https://neovim.io/doc/user/treesitter.html) of Neovim
-
----
-### LSP
 LSP stands for Language Server Protocol. It's a protocol that helps editors
 and language tooling communicate in a standardized fashion.
 
@@ -32,13 +26,3 @@ Check `:help lsp` for more information about the expected workflow with lsp
 New Neovim version 0.11+ added new vim.lsp APIs that support natively LSP config, these include:
     - vim.lsp.config()
     - vim.lsp.enable() ~ Already have builtin FileType detection
----
-### Formater
-
----
-### Linter
-A tool that analyzes source code to flag programming errors, bugs, stylistic errors, and suspicious constructs.
-- TODO: conduct a comparison with LSP and understand the reason why we need this
-
----
-### Completion
