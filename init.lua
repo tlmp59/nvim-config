@@ -7,10 +7,8 @@ vim.g.maplocalleader = "\\"
 -- Enable nerd font support
 vim.g.have_nerd_font = true
 
--- Import config modules
-vim.iter(vim.api.nvim_get_runtime_file("lua/*.lua", true)):map(function(file)
-	require(vim.fn.fnamemodify(file, ":t:r"))
-end)
+-- Get nvim configs
+require("config")
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

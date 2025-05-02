@@ -120,3 +120,17 @@ end
 vim.schedule(function()
 	vim.opt.clipboard = "unnamedplus"
 end)
+
+-- Import other config modules
+local configs = vim.iter(vim.api.nvim_get_runtime_file("lua/config/*.lua", true))
+	:map(function(file)
+		return vim.fn.fnamemodify(file, ":t:r")
+	end)
+	:filter(function(name)
+		return name ~= "init"
+	end)
+	:totable()
+
+for _, v in ipairs(configs) do
+	require("config." .. v)
+end
