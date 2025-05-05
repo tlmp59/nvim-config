@@ -11,4 +11,4 @@ vim.keymap.set({ 'n', 'v' }, ' ', '<nop>', { silent = true })
 vim.g.have_nerd_font = true
 
 -- -- Import important modules
-require("bootstrap")
+require 'bootstrap'
