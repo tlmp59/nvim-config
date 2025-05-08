@@ -1,7 +1,6 @@
--- Setting options
+-- Setting options --
 -- See `:help vim.opt`
 -- For more options, check `:help option-list`
-
 local options = {
     -- Enable auto indentation
     autoindent = true,
@@ -116,21 +115,15 @@ for _, plugin in pairs(disabled_built_ins) do
     vim.g['loaded_' .. plugin] = 1
 end
 
--- Sync clipboard between OS and Neovim
+-- Sync clipboard between OS and Neovim --
 vim.schedule(function()
     vim.opt.clipboard = 'unnamedplus'
 end)
 
--- -- Import other config modules
--- local configs = vim.iter(vim.api.nvim_get_runtime_file('lua/config/*.lua', true))
---     :map(function(file)
---         return vim.fn.fnamemodify(file, ':t:r')
---     end)
---     :filter(function(name)
---         return name ~= 'init'
---     end)
---     :totable()
---
--- for _, v in ipairs(configs) do
---     require('config.' .. v)
--- end
+-- Import user defined modules --
+vim.iter(vim.api.nvim_get_runtime_file('lua/config/*.lua', true)):map(function(file)
+    local name = vim.fn.fnamemodify(file, ':t:r')
+    if name ~= 'init' then
+        pcall(require, 'config.' .. name)
+    end
+end)

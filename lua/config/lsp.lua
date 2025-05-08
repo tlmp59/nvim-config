@@ -1,10 +1,28 @@
--- LSP keymaps and autocmds --
--- source: https://github.com/MariaSolOs/dotfiles/blob/main/.config/nvim/lua/lsp.lua#L9
+-- LSP Config --
 local methods = vim.lsp.protocol.Methods
 
 ---@param client vim.lsp.Client
 ---@param bufnr integer
 local function on_attach(client, bufnr)
+    -- Keymap
+    local M = function(keys, func, desc, mode)
+        mode = mode or 'n'
+        vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = 'LSP: ' .. desc })
+    end
+
+    M('[d', function()
+        vim.diagnostic.jump { count = -1 }
+    end, 'Previous diagnostic')
+    M(']d', function()
+        vim.diagnostic.jump { count = 1 }
+    end, 'Next diagnostic')
+    M('[e', function()
+        vim.diagnostic.jump { count = -1, severity = vim.diagnostic.severity.ERROR }
+    end, 'Previous error')
+    M(']e', function()
+        vim.diagnostic.jump { count = 1, severity = vim.diagnostic.severity.ERROR }
+    end, 'Next error')
+
     -- Features: Highlight word under cursor
     -- source: https://github.com/dam9000/kickstart-modular.nvim/blob/master/lua/kickstart/plugins/lspconfig.lua#L125
     if client:supports_method(methods.textDocument_documentHighlight, bufnr) then
@@ -30,9 +48,8 @@ local function on_attach(client, bufnr)
         })
     end
 
-    -- Features: Adding inlay hints command if supported
+    -- Features: Adding inlay hints command if supported (remember to enable features in server config)
     -- source: https://github.com/MariaSolOs/dotfiles/blob/main/.config/nvim/lua/commands.lua#L6C1-L12C49
-    -- tip: remmber to enable inlayhints in lsp server config
     if client:supports_method(methods.textDocument_inlayHint, bufnr) then
         vim.api.nvim_create_user_command('LspInlayHints', function()
             local enabled = vim.lsp.inlay_hint.is_enabled { bufnr = bufnr }
@@ -42,6 +59,27 @@ local function on_attach(client, bufnr)
         end, { desc = 'Toggle inlay hints', nargs = 0 })
     end
 end
+
+-- Diagnostic Config --
+-- See :help vim.diagnostic.Opts for more details
+vim.diagnostic.config {
+    severity_sort = true,
+    float = { border = 'rounded', source = 'if_many' },
+    underline = { severity = vim.diagnostic.severity.ERROR },
+    virtual_text = {
+        source = 'if_many',
+        spacing = 2,
+        format = function(diagnostic)
+            local diagnostic_message = {
+                [vim.diagnostic.severity.ERROR] = diagnostic.message,
+                [vim.diagnostic.severity.WARN] = diagnostic.message,
+                [vim.diagnostic.severity.INFO] = diagnostic.message,
+                [vim.diagnostic.severity.HINT] = diagnostic.message,
+            }
+            return diagnostic_message[diagnostic.severity]
+        end,
+    },
+}
 
 -- Update features when registering dynamic capbilities --
 -- source: https://github.com/MariaSolOs/dotfiles/blob/main/.config/nvim/lua/lsp.lua#L216
@@ -57,7 +95,17 @@ vim.lsp.handlers[methods.client_registerCapability] = function(err, res, ctx)
     return register_capability(err, res, ctx)
 end
 
--- Call LSP features on current attach buffer --
+-- Make every lsp float previews have border --
+-- source: https://www.reddit.com/r/neovim/comments/1jbegzo/how_to_change_border_style_in_floating_windows/
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+---@diagnostic disable-next-line: duplicate-set-field
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+  opts = opts or {}
+  opts.border = "rounded" -- Or any other border
+  return orig_util_open_floating_preview(contents, syntax, opts, ...)
+end
+
+-- Enable LSP servers --
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('user/lsp_attach', { clear = true }),
     callback = function(args)
@@ -70,24 +118,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end,
 })
 
--- Simple lsp progess notification
--- source: https://github.com/folke/snacks.nvim/blob/main/docs/notifier.md
-vim.api.nvim_create_autocmd('LspProgress', {
-    ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
-    callback = function(ev)
-        local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
-        vim.notify(vim.lsp.status(), 'info', {
-            id = 'lsp_progress',
-            -- title = 'LSP Progress',
-            opts = function(notif)
-                notif.icon = ev.data.params.value.kind == 'end' and ' ' or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-            end,
-        })
-    end,
-})
-
--- Enable LSP servers --
--- source: https://github.com/MariaSolOs/dotfiles/blob/main/.config/nvim/lua/lsp.lua#L243
 vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
     once = true, -- ensure cmd runs only once, then automatically removed
     callback = function()
@@ -96,6 +126,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
                 return vim.fn.fnamemodify(file, ':t:r')
             end)
             :totable()
+
         vim.lsp.enable(server_configs)
     end,
 })
