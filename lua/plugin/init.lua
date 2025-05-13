@@ -19,6 +19,9 @@ local M = {
                     PmenuSel = { fg = 'none', bg = theme.ui.bg_p2 },
                     PmenuSbar = { bg = theme.ui.bg_m1 },
                     PmenuThumb = { bg = theme.ui.bg_p2 },
+
+                    BlinkCmpMenu = { bg = 'none' },
+                    BlinkCmpMenuBorder = { fg = theme.ui.fg_dim, bg = 'none' },
                 }
             end,
         },
@@ -28,12 +31,5 @@ local M = {
         end,
     },
 }
-
-vim.iter(vim.api.nvim_get_runtime_file('lua/plugin/extra/*.lua', true)):map(function(file)
-    local name = vim.fn.fnamemodify(file, ':t:r')
-    if name ~= 'init' then
-        table.insert(M, require('plugin.extra.' .. name))
-    end
-end)
 
 return M
