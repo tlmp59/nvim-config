@@ -1,8 +1,7 @@
-<h3 align="center">
-  T|mpLab's Neovim Config
-</h3>
+<h3 align="center"> T|mpLab's Neovim Config </h3>
 
 ### Chapter 1: Lua - The foundation
+
 - Write something about lua its origin, why it was chosen to be neovim config language
 - Mechanism over policy? - Tjdevries
 - Including some basic things one needs to know about lua programming language to start with Neovim
@@ -36,6 +35,7 @@ for k, v in pairs(rand_map) do -- think pairs as a pair of key and value
   print(k, v)
 end
 ```
+
 <h4 align="center">Function</h4>
 
 ```lua
@@ -50,6 +50,7 @@ print(second)
 print(last)
 -- the '4' did not get assigned hence it is discarded
 ```
+
 <h4 align="center">Condition</h4>
 
 ```lua
@@ -59,9 +60,11 @@ local function action(x)
   else
     print("x is falsey") -- when x = false; nil
 ```
+
 <h4 align="center">Modules</h4>
 
 There isn't anything special about modules, they are just simply files!
+
 ```lua
 -- foo.lua
 local M = {}
@@ -74,9 +77,11 @@ return M
 local foo = require('foo') -- assume foo.lua and bar.lua are in the same directories
 foo.cool_func()
 ```
+
 <h4 align="center">Metatables</h4>
 
 A thing that contains information about a table
+
 ```lua
 __add
 __index
@@ -85,11 +90,15 @@ __call(self, ... )
 ```
 
 ### Chapter 2: Runtime path
+
 See :help rtp for more information
 
 This repo use the following rtp:
+
 - `after/ftplugin`
 - `doc`
 - `lua`
 - `lsp`
 - `plugin`
+
+$\:$

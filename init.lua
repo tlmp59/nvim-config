@@ -24,6 +24,10 @@ local options = {
     -- Show which line the cursor is on
     cursorline = true,
 
+    -- Encoding
+    encoding = 'utf-8',
+    fileencoding = 'utf-8',
+
     -- Make relative number default
     relativenumber = true,
 
@@ -58,7 +62,6 @@ local options = {
     -- Save undo history to undodir
     swapfile = false,
     backup = false,
-    undodir = os.getenv 'HOME' .. '/.vim/undodir',
     undofile = true,
 
     -- Configure tab indent
@@ -67,36 +70,51 @@ local options = {
     shiftwidth = 4,
     expandtab = true,
 
-    -- Hide statusline
-    laststatus = 0,
-    statusline = '%#Normal#',
-
-    -- Configure whitespace characters display in the editor
+    -- Configure characters display in the editor
     list = true,
     listchars = { tab = '| ', trail = '·', nbsp = '␣' },
+    fillchars = { msgsep = '─' },
 
     -- Configure how completion menus behave
-    completeopt = 'menuone,noselect',
+    completeopt = 'menuone,noselect,noinsert',
+    pumheight = 15,
 
     -- Preview substitutions live, as w type
     inccommand = 'split',
 
     -- Hide tabline
-    showtabline = 1,
+    showtabline = 0,
 
     -- Allow only n command line
     cmdheight = 1,
 
     -- Decrease update time
-    updatetime = 250,
+    updatetime = 300,
 
     -- Decrease mapped sequence wait time
-    timeoutlen = 300,
+    timeoutlen = 500,
+    ttimeoutlen = 10,
+
+    -- Default wrap option
+    wrap = false,
+    linebreak = true,
+
+    -- Default float border
+    winborder = 'rounded',
+
+    -- Stay center
+    scrolloff = 10,
 }
 
 for k, v in pairs(options) do
     vim.opt[k] = v
 end
+
+-- Short messages
+vim.opt.shortmess:append {
+    w = true,
+    s = true,
+}
 
 -- Disable unsused default plugin (#disable) --
 local disabled_built_ins = {
@@ -125,15 +143,23 @@ for _, plugin in pairs(disabled_built_ins) do
     vim.g['loaded_' .. plugin] = 1
 end
 
--- Sync clipboard between OS and Neovim --
+-- Sync clipboard between OS and Neovim
 vim.schedule(function()
     vim.opt.clipboard = 'unnamedplus'
 end)
+--(#opts)
+
+-- User commands (#ucmd) --
+vim.api.nvim_create_user_command('ToggleWrap', function()
+    vim.wo.wrap = not vim.wo.wrap
+    vim.notify('Wrap ' .. (vim.wo.wrap and 'enabled' or 'disabled'), vim.log.levels.INFO)
+end, { desc = 'Toggle wrap in current buffer', nargs = 0 })
+--(#ucmd)
 
 -- User auto-commands (#acmd) --
 ---@param desc string
 local augroup = function(desc)
-    return vim.api.nvim_create_augroup('tlmp59/' .. desc, { clear = true })
+    return vim.api.nvim_create_augroup('user/' .. desc, { clear = true })
 end
 
 -- source:
@@ -159,6 +185,7 @@ vim.api.nvim_create_autocmd('FileType', {
         'man',
         'qf',
         'scratch',
+        'grug-far',
     },
     callback = function(args)
         vim.keymap.set('n', 'q', '<cmd>quit<cr>', { buffer = args.buf })
@@ -195,6 +222,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
         vim.hl.on_yank { higroup = 'Visual', priority = 250 }
     end,
 })
+--(#acmd)
 
 -- LSP config (#lsp) --
 local methods = vim.lsp.protocol.Methods
@@ -276,7 +304,7 @@ end
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('user/lsp_attach', { clear = true }),
     callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
         if not client then
             return
         end
@@ -288,36 +316,147 @@ vim.api.nvim_create_autocmd('LspAttach', {
 vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
     once = true, -- ensure cmd runs only once, then automatically removed
     callback = function()
-        local server_configs = vim.iter(vim.api.nvim_get_runtime_file('lsp/*.lua', true))
+        local servers = vim.iter(vim.api.nvim_get_runtime_file('lsp/*.lua', true))
             :map(function(file)
                 return vim.fn.fnamemodify(file, ':t:r')
             end)
             :totable()
 
-        vim.lsp.enable(server_configs)
+        vim.lsp.enable(servers)
     end,
 })
+--(#lsp)
 
 -- Diagnostic config (#diag) --
 -- See :help vim.diagnostic.Opts for more details
+local dicons = require('icon').diagnostics
+
+-- Define the diagnostic signs.
+-- source: https://github.com/MariaSolOs/dotfiles/blob/main/.config/nvim/lua/lsp.lua#L146
+for severity, icon in pairs(dicons) do
+    local hl = 'DiagnosticSign' .. severity:sub(1, 1) .. severity:sub(2):lower()
+    vim.fn.sign_define(hl, { text = icon, texthl = hl })
+end
+
 vim.diagnostic.config {
-    severity_sort = true,
-    float = { border = 'rounded', source = 'if_many' },
-    underline = { severity = vim.diagnostic.severity.ERROR },
     virtual_text = {
-        source = 'if_many',
+        prefix = '',
         spacing = 2,
         format = function(diagnostic)
-            local diagnostic_message = {
-                [vim.diagnostic.severity.ERROR] = diagnostic.message,
-                [vim.diagnostic.severity.WARN] = diagnostic.message,
-                [vim.diagnostic.severity.INFO] = diagnostic.message,
-                [vim.diagnostic.severity.HINT] = diagnostic.message,
+            -- Use shorter, nicer names for some sources:
+            local special_sources = {
+                ['Lua Diagnostics.'] = 'lua',
+                ['Lua Syntax Check.'] = 'lua',
             }
-            return diagnostic_message[diagnostic.severity]
+
+            local message = dicons[vim.diagnostic.severity[diagnostic.severity]]
+            if diagnostic.source then
+                message = string.format('%s %s', message, special_sources[diagnostic.source] or diagnostic.source)
+            end
+            if diagnostic.code then
+                message = string.format('%s[%s]', message, diagnostic.code)
+            end
+
+            return message .. ' '
         end,
     },
+    float = {
+        border = 'rounded',
+        source = 'if_many',
+        -- Show severity icons as prefixes.
+        prefix = function(diag)
+            local level = vim.diagnostic.severity[diag.severity]
+            local prefix = string.format(' %s ', dicons[level])
+            return prefix, 'Diagnostic' .. level:gsub('^%l', string.upper)
+        end,
+    },
+
+    -- Disable signs in the gutter.
+    signs = false,
 }
 
--- Install plugin --
+-- Override the virtual text diagnostic handler so that the most severe diagnostic is shown first.
+local show_handler = vim.diagnostic.handlers.virtual_text.show
+assert(show_handler)
+local hide_handler = vim.diagnostic.handlers.virtual_text.hide
+vim.diagnostic.handlers.virtual_text = {
+    show = function(ns, bufnr, diagnostics, opts)
+        table.sort(diagnostics, function(diag1, diag2)
+            return diag1.severity > diag2.severity
+        end)
+        return show_handler(ns, bufnr, diagnostics, opts)
+    end,
+    hide = hide_handler,
+}
+
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+    max_height = math.floor(vim.o.lines * 0.5),
+    max_width = math.floor(vim.o.columns * 0.4),
+})
+
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+    max_height = math.floor(vim.o.lines * 0.5),
+    max_width = math.floor(vim.o.columns * 0.4),
+})
+--(#diag)--
+
+-- Install plugin (#lazy) --
 require 'init'
+--(#lazy)
+
+-- Useful user-defined builtin keymaps (#keymap)
+local keys = {
+    -- Disable mouse and arrow movement
+    { 'n', '<left>', '<cmd>echo "Use h to move!!"<CR>' },
+    { 'n', '<right>', '<cmd>echo "Use l to move!!"<CR>' },
+    { 'n', '<up>', '<cmd>echo "Use k to move!!"<CR>' },
+    { 'n', '<down>', '<cmd>echo "Use j to move!!"<CR>' },
+
+    -- Remove highlight after search
+    { 'n', '<Esc>', '<cmd>nohlsearch<CR>' },
+
+    -- Keep screen centered when moving around
+    { 'n', '*', '*zzzv' },
+    { 'n', '#', '#zzzv' },
+    { 'n', ',', ',zzzv' },
+    { 'n', ';', ';zzzv' },
+    { 'n', 'n', 'nzzzv' },
+    { 'n', 'N', 'Nzzzv' },
+
+    -- Keep selected after moving with < and >
+    { 'v', '<', '<gv' },
+    { 'v', '>', '>gv' },
+
+    -- Seemlessly naviagate between split windows
+    { 'n', '<C-h>', ':wincmd h<cr>', { desc = 'Move focus to the left window', silent = true } },
+    { 'n', '<C-l>', ':wincmd l<cr>', { desc = 'Move focus to the right window', silent = true } },
+    { 'n', '<C-j>', ':wincmd j<cr>', { desc = 'Move focus to the lower window', silent = true } },
+    { 'n', '<C-k>', ':wincmd k<cr>', { desc = 'Move focus to the upper window', silent = true } },
+
+    -- Better vertical movement with word wrap
+    { 'n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true } },
+    { 'n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true } },
+
+    -- Windows size adjustment
+    { 'n', '<C-Left>', ':vertical resize +10<CR>', { silent = true } },
+    { 'n', '<C-Right>', ':vertical resize -10<CR>', { silent = true } },
+    { 'n', '<C-Up>', ':resize +10<CR>', { silent = true } },
+    { 'n', '<C-Down>', ':resize -10<CR>', { silent = true } },
+
+    -- Windows splits
+    { 'n', '<C-w>"', '<cmd>split<cr>', { noremap = true, desc = 'Split window horizontally', silent = true } },
+    { 'n', '<C-w>%', '<cmd>vsplit<cr>', { noremap = true, desc = 'Split window vertically', silent = true } },
+}
+
+vim.iter(keys):map(function(v)
+    vim.keymap.set(v[1], v[2], v[3], v[4] or {})
+end)
+--(#keymap)
+
+-- Disable statusbar (#statb) --
+vim.opt.laststatus = 0
+vim.opt.statusline = '%#HorSplit#'
+--(#stats)
+
+-- Winbar config (#winb) --
+--(#winb)

@@ -17,7 +17,7 @@ end
 -- Put lazy into the runtimepath(rtp)
 vim.opt.rtp:prepend(lazypath)
 
--- Setup lazy.nvim and init core plugins
+-- Setup lazy.nvim and install core plugins
 require('lazy').setup({
     { -- Configure Lua LSP to recognize completion, annotations, and signatures of Neovim APIs
         'folke/lazydev.nvim',
@@ -30,7 +30,7 @@ require('lazy').setup({
         },
     },
 
-    { -- Highlight, and code naviation (#trs)
+    { -- Highlight, and code navigation (#trs)
         'nvim-treesitter/nvim-treesitter',
         version = false,
         build = ':TSUpdate', -- command to run when treesitter is installed or updated
@@ -47,6 +47,8 @@ require('lazy').setup({
                 'markdown_inline',
                 'yaml',
                 'python',
+                'latex',
+                'html',
             },
 
             highlight = {
@@ -55,7 +57,6 @@ require('lazy').setup({
                 -- disable treesitter on large file
                 disable = function(_, buf)
                     local max_filesize = 100 * 1024 -- 100 KB
-                    ---@diagnostic disable-next-line: undefined-field
                     local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
                     if ok and stats and stats.size > max_filesize then
                         return true
@@ -92,6 +93,9 @@ require('lazy').setup({
             formatters_by_ft = {
                 lua = { 'stylua' },
                 python = { 'isort', 'black' },
+                markdown = { 'prettier', name = 'dprint', timeout_ms = 500, lsp_format = 'fallback' },
+                -- quarto = { 'injected' },
+
                 -- For filetypes without a formatter:
                 ['_'] = { 'trim_whitespace', 'trim_newlines' },
 
@@ -104,7 +108,7 @@ require('lazy').setup({
     { -- Code auto completion (#cmp)
         'saghen/blink.cmp',
         event = 'InsertEnter',
-        version = '1.*',
+        version = '*',
         dependencies = {
             -- Snippets engine
             {
@@ -124,6 +128,11 @@ require('lazy').setup({
                 },
                 opts = {},
             },
+            {
+                'jmbuhr/cmp-pandoc-references',
+                dev = false,
+                ft = { 'quarto', 'markdown', 'rmarkdown' },
+            },
         },
 
         opts = {
@@ -135,22 +144,29 @@ require('lazy').setup({
                     selection = { preselect = false, auto_insert = true },
                     max_items = 10,
                 },
-
-                -- By default, you may press `<c-space>` to show the documentation.
-                -- Optionally, set `auto_show = true` to show the documentation after a delay.
-                documentation = { auto_show = true },
+                documentation = { auto_show = true, treesitter_highlighting = true },
             },
+
+            -- Completion sources
             sources = {
-                default = { 'lsp', 'path', 'snippets', 'lazydev' },
+                default = { 'lazydev', 'lsp', 'path', 'references', 'snippets', 'buffer' },
                 providers = {
-                    lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+                    lazydev = {
+                        module = 'lazydev.integrations.blink',
+                        score_offset = 100,
+                    },
+                    references = {
+                        module = 'cmp-pandoc-references.blink',
+                        score_offset = 2,
+                    },
                 },
             },
+
             snippets = { preset = 'luasnip' },
 
             -- Blink.cmp includes an optional, recommended rust fuzzy matcher, which automatically downloads a prebuilt binary when enabled.
             -- See :h blink-cmp-config-fuzzy for more information
-            fuzzy = { implementation = 'lua' },
+            fuzzy = { implementation = 'prefer_rust_with_warning' },
 
             -- Shows a signature help window while you type arguments for a function
             signature = { enabled = true },
@@ -185,22 +201,6 @@ require('lazy').setup({
                 end,
             })
         end,
-    },
-
-    { -- Fuzzy find (#fzf)
-    },
-
-    { -- File explorer (#exp)
-        'mikavilpas/yazi.nvim',
-        cmd = 'Yazi',
-        opts = {
-            open_for_directories = true,
-            keymaps = {
-                show_help = '<f1>',
-            },
-            floating_window_scaling_factor = 0.8,
-            yazi_floating_window_border = 'rounded',
-        },
     },
 
     { import = 'plugin' }, -- other optional plugins
