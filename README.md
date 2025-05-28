@@ -11,10 +11,10 @@ Variables, Functions, Loops, Data structures, Modules, etc.
 <h4 align="center">Loops</h4>
 
 ```lua
-local rand_list = { "apple", "orange", "banana" }
+local rand_list = { 'apple', 'orange', 'banana' }
 
 for i = 1, #rand_list do
-  print(i, rand_list[i])
+    print(i, rand_list[i])
 end
 
 --[[
@@ -24,15 +24,14 @@ end
      3 banana
 --]]
 
-
 for i, v in ipairs(rand_list) do -- think ipairs as a pair of index and value
-  print(i, v)
+    print(i, v)
 end
 -- return same as above
 
-local rand_map = { apple = 10, orange=5, banana=3 }
+local rand_map = { apple = 10, orange = 5, banana = 3 }
 for k, v in pairs(rand_map) do -- think pairs as a pair of key and value
-  print(k, v)
+    print(k, v)
 end
 ```
 
@@ -74,7 +73,7 @@ return M
 
 ```lua
 -- bar.lua
-local foo = require('foo') -- assume foo.lua and bar.lua are in the same directories
+local foo = require 'foo' -- assume foo.lua and bar.lua are in the same directories
 foo.cool_func()
 ```
 
@@ -83,10 +82,10 @@ foo.cool_func()
 A thing that contains information about a table
 
 ```lua
-__add
-__index
+__add()
+__index()
 __newindex(self, key, value)
-__call(self, ... )
+__call(self, ...)
 ```
 
 ### Chapter 2: Runtime path
@@ -101,4 +100,24 @@ This repo use the following rtp:
 - `lsp`
 - `plugin`
 
-$\:$
+<h3>LSP</h3>
+
+LSP stands for Language Server Protocol. It's a protocol that helps editors
+and language tooling communicate in a standardized fashion.
+
+In general, you have a "server" which is some tool built to understand a particular
+language (such as `gopls`, `lua_ls`, `rust_analyzer`, etc.). These Language Servers
+(sometimes called LSP servers, but that's kind of like ATM Machine) are standalone
+processes that communicate with some "client" - in this case, Neovim!
+
+LSP provides Neovim with features like: - Go to definition - Find references - Autocompletion - Symbol Search - and more!
+
+Thus, Language Servers are external tools that must be installed separately from
+Neovim. This is where `mason` and related plugins come into play.
+
+If you're wondering about lsp vs treesitter, you can check out the wonderfully
+and elegantly composed help section, `:help lsp-vs-treesitter`
+
+Check `:help lsp` for more information about the expected workflow with lsp
+
+New Neovim version 0.11+ added new vim.lsp APIs that support natively LSP config, these include: - vim.lsp.config() - vim.lsp.enable() ~ Already have builtin FileType detection
